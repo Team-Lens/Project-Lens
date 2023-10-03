@@ -15,3 +15,26 @@ body{
     color: var(--text-color);
     background-color: var(--bg-color);
 }
+/*SCROLLBAR*/
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: hsl(0, 0%, 43%);;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-color);
+  }
+
+
