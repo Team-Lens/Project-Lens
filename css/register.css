@@ -1,14 +1,10 @@
-:root{
-    --bg-color: #222327;
-    --text-color: #fff;
-    --main-color: #198cff;
-}
+@import url("../css/default.css"); /* Import Website colors and default styles from one css file */
+
 body{
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    color: var(--text-color);
     background-image: url('../pictures/login.jpg');
     background-size: cover;
 }

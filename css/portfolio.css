@@ -1,0 +1,85 @@
+@import url("../css/default.css"); /* Import Website colors and default styles from one css file */
+
+.home{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 70px 10% 0;
+    justify-content: space-between;
+}
+.home-content{
+    max-width:  600px;
+}
+.home-content h1{
+    font-size: 56px;
+    line-height: 1.2;
+}
+.home-content h3{
+    font-size: 32px;
+}
+.home-content p{
+    font-size: 16px;
+    margin: 10px 0 40px;
+}
+.btn{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 48px;
+    background: var(--main-color);
+    border-radius: 40px;
+    font-size: 19px;
+    color: var(--text-color);
+    letter-spacing: 1px;
+}
+.home-sci a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 25px;
+    background: var(--bg-color);
+    border: 3px solid var(--main-color);
+    color: var(--text-color);
+    margin: 20px 0;
+}
+.home-img{
+    width: 410px;
+    height: 410px;
+}
+.home-img .glowing-circle{
+    width: 100%;
+    height: 100%;
+    background-color: var(--main-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.home-img .glowing-circle::after{
+    content: '';
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    background: var(--bg-color);
+    border-radius: 50%;
+}
+.glowing-circle .image{
+    position: relative;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    z-index: 1;
+    overflow: hidden;
+}
+.image img{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 380px;
+    object-fit: cover;
+}
