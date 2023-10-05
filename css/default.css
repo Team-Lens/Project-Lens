@@ -11,6 +11,9 @@
     --text-color: #fff;
     --main-color: #5266d8;
 }
+html{
+  scroll-behavior: smooth;
+}
 body{
     color: var(--text-color);
     background-color: var(--bg-color);
