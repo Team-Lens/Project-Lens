@@ -30,10 +30,10 @@ header{
     font-size: 1.7rem;
     font-weight: 600;
 }
-.navbar{
+header .navbar{
     display: flex;
 }
-.navbar a{
+header .navbar a{
     color: var(--text-color);
     font-size: 1.1rem;
     font-weight: 500;
@@ -41,11 +41,11 @@ header{
     margin: 0px 30px;
     transition: all .50s ease;
 }
-.navbar a:hover{
+header .navbar a:hover{
     color: var(--main-color);
     transition: .1s ease;
 }
-.navbar a.active{
+header .navbar a.active{
     color: var(--main-color);
 }
 .main{
@@ -93,7 +93,7 @@ header{
     #menu-icon{
         display: block;
     }
-    .navbar{
+    header .navbar{
         position: absolute;
         top: 100%;
         right: -100%;
@@ -106,20 +106,20 @@ header{
         border-radius: 10px;
         transition: all .50s ease;
     }
-    .navbar a{
+    header .navbar a{
         display: block;
         margin: 12px 0;
         padding: 0px 25px;
         transition: all .50s ease;
     }
-    .navbar a:hover{
+    header .navbar a:hover{
         color: var(--text-color);
         transform: translateY(3px);
     }
-    .navbar a.active{
+    header .navbar a.active{
         color: var(--bg-color);
     }
-    .navbar.open{
+    header .navbar.open{
         right: 2%;
     }
 }
