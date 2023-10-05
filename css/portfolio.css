@@ -33,6 +33,7 @@
     font-size: 19px;
     color: var(--text-color);
     letter-spacing: 1px;
+    user-select: none;
 }
 .home-sci a{
     display: flex;
