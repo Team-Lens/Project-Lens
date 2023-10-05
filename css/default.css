@@ -9,7 +9,7 @@
 :root{
     --bg-color: #222327;
     --text-color: #fff;
-    --main-color: #198cff;
+    --main-color: #5266d8;
 }
 body{
     color: var(--text-color);
