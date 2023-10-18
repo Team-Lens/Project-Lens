@@ -21,7 +21,7 @@
         </ul>
         <div class="main">
             <a href="login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
-            <a href="register.html">Register</a>
+            <a href="register.html" class="register">Register</a>
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
     </header>
@@ -51,7 +51,24 @@
     <!--js link-->
     <script type="text/javascript" src="./javascript/navbar.js"></script>
     <script type="module">
-        import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from './javascript/firebase-init.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+        import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqEinFNEbT60fxg_ig9AuadPQJjt48UXo",
+            authDomain: "project-lens-a4781.firebaseapp.com",
+            databaseURL: "https://project-lens-a4781-default-rtdb.firebaseio.com",
+            projectId: "project-lens-a4781",
+            storageBucket: "project-lens-a4781.appspot.com",
+            messagingSenderId: "498275826443",
+            appId: "1:498275826443:web:54c54f5fdc7925d50e400e",
+            measurementId: "G-N91T52EGWC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
 
         // Your HTML-specific code using Firebase functions goes here
         const emailInput = document.getElementById('email');
@@ -75,12 +92,13 @@
                 })
                 // ...
                 alert("user logged in");
+                window.location.href = "portfolio.html";
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
 
-                alert('errorMessage');
+                alert(errorMessage);
             });
         })
     </script>

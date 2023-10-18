@@ -79,6 +79,10 @@ header .navbar a.active{
     z-index: 10001;
     display: none;
 }
+.logout {
+    display: none;
+    margin-right: 10px; /* Add margin to create spacing */
+}
 @media (max-width: 1280px){
     header{
         padding: 14px 2%;

@@ -54,6 +54,65 @@
     </footer>
     <!--js link-->
     <script type="text/javascript" src="./javascript/navbar.js"></script>
-    <script type="module" src="./javascript/google.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+        import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqEinFNEbT60fxg_ig9AuadPQJjt48UXo",
+            authDomain: "project-lens-a4781.firebaseapp.com",
+            databaseURL: "https://project-lens-a4781-default-rtdb.firebaseio.com",
+            projectId: "project-lens-a4781",
+            storageBucket: "project-lens-a4781.appspot.com",
+            messagingSenderId: "498275826443",
+            appId: "1:498275826443:web:54c54f5fdc7925d50e400e",
+            measurementId: "G-N91T52EGWC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const password1Input = document.getElementById('password1');
+        const password2Input = document.getElementById('password2');
+
+        regBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent the form from submitting by default
+
+            // Get the values of the input fields
+            const name = nameInput.value;
+            const email = emailInput.value;
+            const password1 = password1Input.value;
+            const password2 = password2Input.value;
+
+            if (password1 !== password2) {
+                alert("Passwords do not match.");
+                return; // Stop the registration process
+            }
+
+            createUserWithEmailAndPassword(auth, email, password1)
+                .then((userCredential) => {
+                    // Signed up 
+                    const user = userCredential.user;
+
+                    set(ref(database, 'users/' + user.uid),{
+                        name: name,
+                        email: email,
+                    })
+                    // ...
+                    alert('user created!');
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+
+                    alert('errorMessage');
+                    // ..
+            });
+        })
+    </script>
 </body>
 </html>
