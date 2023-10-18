@@ -13,7 +13,7 @@
 </head>
 <body>
     <header>
-        <a href="register.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
+        <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
         <ul class="navbar">
             <li><a href="index.html">Explore</a></li>
             <li><a href="social.html">Social</a></li>
@@ -21,7 +21,7 @@
         </ul>
         <div class="main">
             <a href="login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
-            <a href="register.html">Register</a>
+            <a href="register.html" class="register">Register</a>
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
     </header>
@@ -56,7 +56,7 @@
     <script type="text/javascript" src="./javascript/navbar.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-        import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+        import { getDatabase, set, ref, get, onValue, update} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -98,13 +98,35 @@
                     // Signed up 
                     const user = userCredential.user;
 
-                    set(ref(database, 'users/' + user.uid),{
-                        name: name,
-                        email: email,
-                    })
-                    // ...
-                    alert('user created! please sign in');
-                    window.location.href = "login.html";
+                    if (user) {
+                        const userData = {
+                            name: name,
+                            email: email,
+                            profileCreated: false // Set to false initially
+                        };
+
+                        // Log the user data to ensure it's correct
+                        console.log('User Data:', userData);
+
+                        // Set the initial user data, including the profileCreated flag
+                        set(ref(database, 'users/' + user.uid), userData)
+                            .then(() => {
+                                // Data has been written to the database
+                                console.log('User data written to the database.');
+
+                                // ...
+
+                                alert('User created! lets sign in.');
+                                window.location.href = "login.html";
+                            })
+                            .catch((error) => {
+                                console.error('Error writing user data:', error);
+                                alert('Error during registration.');
+                            });
+                    } else {
+                        console.error('User not found after registration.');
+                        alert('Error during registration.');
+                    }
                 })
                 .catch((error) => {
                     const errorCode = error.code;
