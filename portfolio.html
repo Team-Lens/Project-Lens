@@ -23,6 +23,9 @@
         <div class="main">
             <a href="login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
             <a href="register.html" class="register">Register</a>
+            <a href="portfolio.html" class="profile-circle">
+                <i class="glowing-circle" id="user-initial"></i>
+            </a>
             <a href="#" class="logout">Logout</a>
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
@@ -165,7 +168,6 @@
                             window.location.href = "profile.html";
                         } else {
                             // User has not created a profile
-                            alert("Let's create a profile");
                             window.location.href = "createProfile.html";
                         }
                     })

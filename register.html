@@ -34,7 +34,7 @@
                 </div>
                 <div class="input-box">
                     <input type="text" placeholder="Email" id="email" required>
-                    <i class="ri-polaroid-2-line"></i>
+                    <i class="ri-mail-line"></i>
                 </div>
                 <div class="input-box">
                     <input type="password" placeholder="Password" id="password1" required>
@@ -80,7 +80,6 @@
         const password2Input = document.getElementById('password2');
 
         regBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent the form from submitting by default
 
             // Get the values of the input fields
             const name = nameInput.value;
@@ -132,7 +131,6 @@
                     const errorCode = error.code;
                     const errorMessage = error.message;
 
-                    alert('errorMessage');
                     // ..
             });
         })

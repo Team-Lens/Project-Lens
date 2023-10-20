@@ -21,10 +21,12 @@
         <div class="main">
             <a href="login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
             <a href="register.html" class="register">Register</a>
+            <a href="portfolio.html" class="profile-circle">
+                <i class="glowing-circle" id="user-initial"></i>
+            </a>
             <a href="#" class="logout">Logout</a>
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
-        
     </header>
     <footer>
     </footer>
@@ -55,22 +57,50 @@
             const signInLink = document.querySelector(".user");
             const registerLink = document.querySelector(".register");
             const logoutLink = document.querySelector(".logout");
+            const profileCircle = document.querySelector(".profile-circle");
+            const userInitial = document.getElementById("user-initial");
 
             // Check the user's login status
             onAuthStateChanged(auth, (user) => {
                 if (user) {
-                    // User is logged in, show the "Logout" link and hide "Sign In" and "Register"
-                    signInLink.style.display = "none";
-                    registerLink.style.display = "none";
-                    logoutLink.style.display = "flex"; // Display the "Logout" link
+                // User is logged in, show the "Logout" link and hide "Sign In" and "Register"
+                
+                signInLink.style.display = "none";
+                registerLink.style.display = "none";
+                profileCircle.style.display = "flex";
+                logoutLink.style.display = "flex"; // Display the "Logout" link
+
+                // Fetch the user's name from the database
+                const userRef = ref(database, 'users/' + user.uid);
+
+                get(userRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                    // Get the user's data from the snapshot
+                    const userData = snapshot.val();
+
+                    // Check if the user's data contains a name
+                    if (userData.name) {
+                        const userFirstName = userData.name; // Assuming the user's name is stored under "name"
+                        const firstInitial = userFirstName.charAt(0).toUpperCase();
+
+                        // Set the glowing circle's content to the first initial
+                        userInitial.textContent = firstInitial;
+                    }
+                    }
+                });
                 } else {
-                    // User is not logged in, show "Sign In" and "Register" and hide "Logout"
-                    signInLink.style.display = "flex";
-                    registerLink.style.display = "flex";
-                    logoutLink.style.display = "none"; // Hide the "Logout" link
+                // User is not logged in, show "Sign In" and "Register" and hide "Logout"
+                signInLink.style.display = "flex";
+                registerLink.style.display = "flex";
+                profileCircle.style.display = "none";
+                logoutLink.style.display = "none"; // Hide the "Logout" link
+
+                // Clear the glowing circle content
+                userInitial.textContent = '';
                 }
             });
         }
+
         // Function to handle user logout
         function handleLogout() {
         // Use the signOut function from the Firebase Auth module to log the user out

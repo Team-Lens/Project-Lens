@@ -30,7 +30,7 @@
                 <h1>Login</h1>
                 <div class="input-box">
                     <input type="text" placeholder="Email" id="email" required>
-                    <i class="ri-polaroid-2-line"></i>
+                    <i class="ri-mail-line"></i>
                 </div>
                 <div class="input-box">
                     <input type="password" placeholder="Password" id="password" required>
@@ -97,8 +97,6 @@
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-
-                alert(errorMessage);
             });
         })
     </script>
