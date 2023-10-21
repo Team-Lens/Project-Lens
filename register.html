@@ -80,7 +80,7 @@
         const password2Input = document.getElementById('password2');
 
         regBtn.addEventListener('click', (e) => {
-
+            e.preventDefault(); // Prevent the form from submitting by default
             // Get the values of the input fields
             const name = nameInput.value;
             const email = emailInput.value;
