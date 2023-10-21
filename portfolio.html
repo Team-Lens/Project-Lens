@@ -22,7 +22,6 @@
         </ul>
         <div class="main">
             <a href="login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
-            <a href="register.html" class="register">Register</a>
             <a href="portfolio.html" class="profile-circle">
                 <i class="glowing-circle" id="user-initial"></i>
             </a>
@@ -108,7 +107,6 @@
 
         function updateSignInLinks() {
             const signInLink = document.querySelector(".user");
-            const registerLink = document.querySelector(".register");
             const logoutLink = document.querySelector(".logout");
 
             // Check the user's login status
@@ -116,7 +114,6 @@
                 if (user) {
                     // User is logged in, show the "Logout" link and hide "Sign In" and "Register"
                     signInLink.style.display = "none";
-                    registerLink.style.display = "none";
                     logoutLink.style.display = "flex"; // Display the "Logout" link
                 } else {
                     // User is not logged in, show "Sign In" and "Register" and hide "Logout"
