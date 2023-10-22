@@ -94,12 +94,14 @@
                 errorMessage.textContent = "Please enter a name";
                 errorMessage.style.display = "flex";
                 e.preventDefault(); // Prevent the form from submitting by default
+                return;
             } else if(!email || !emailPattern.test(email)){
                 emailInput.style.border = "2px solid #ff6961";
                 nameInput.style.border = "initial";
                 errorMessage.textContent = "Please enter a valid email";
                 errorMessage.style.display = "flex";
                 e.preventDefault(); // Prevent the form from submitting by default
+                return;
             } else if(!password1 || !password2){
                 password1Input.style.border = "2px solid #ff6961";
                 password2Input.style.border = "2px solid #ff6961";
@@ -107,6 +109,7 @@
                 errorMessage.textContent = "A password is required";
                 errorMessage.style.display = "flex";
                 e.preventDefault(); // Prevent the form from submitting by default
+                return;
             } else if (password1 !== password2 && password1.length >= 6) {
                 password1Input.style.border = "2px solid #ff6961";
                 password2Input.style.border = "2px solid #ff6961";
@@ -114,6 +117,7 @@
                 errorMessage.textContent = "Passwords do not match";
                 errorMessage.style.display = "flex";
                 e.preventDefault(); // Prevent the form from submitting by default
+                return;
             }
 
             createUserWithEmailAndPassword(auth, email, password1)
@@ -165,6 +169,7 @@
                         errorMessage.textContent = "Password length must be at least 6";
                         errorMessage.style.display = "flex";
                         e.preventDefault(); // Prevent the form from submitting by default
+                        return;
                     }
                     // ..
             });
