@@ -62,7 +62,6 @@
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                 // User is logged in, show the "Logout" link and hide "Sign In" and "Register"
-                
                 signInLink.style.display = "none";
                 profileCircle.style.display = "flex";
                 logoutLink.style.display = "flex"; // Display the "Logout" link
@@ -88,7 +87,6 @@
                 } else {
                 // User is not logged in, show "Sign In" and "Register" and hide "Logout"
                 signInLink.style.display = "flex";
-                registerLink.style.display = "flex";
                 profileCircle.style.display = "none";
                 logoutLink.style.display = "none"; // Hide the "Logout" link
 

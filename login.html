@@ -43,6 +43,7 @@
                 <div class="register-link">
                     <p>Don't have an account? <a href="register.html">Register</a></p>
                 </div>
+                <div class="error-message" id="error"></div>
             </form>
         </div>
     <footer>
@@ -72,10 +73,10 @@
         // Your HTML-specific code using Firebase functions goes here
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
+        const errorMessage = document.getElementById('error');
 
         loginBtn.addEventListener('click' ,(e) => {
             e.preventDefault(); // Prevent the form from submitting by default
-
             // Get the values of the input fields
             const email = emailInput.value;
             const password = passwordInput.value;
@@ -95,7 +96,15 @@
             })
             .catch((error) => {
                 const errorCode = error.code;
-                const errorMessage = error.message;
+                const errorDetails = error.message;
+
+                console.log('Error code:', errorCode); // Log the error code
+                console.log('Error details:', errorDetails); // Log the error details
+                errorMessage.textContent = "Invalid login credentials";
+                emailInput.style.border = "2px solid #ff6961";
+                passwordInput.style.border = "2px solid #ff6961";
+                errorMessage.style.display = "flex";
+                e.preventDefault();
             });
         })
     </script>

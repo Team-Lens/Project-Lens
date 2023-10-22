@@ -47,6 +47,7 @@
                 <div class="login-link">
                     <p>Already have an account? <a href="login.html">Login</a></p>
                 </div>
+                <div class="error-message" id="error"></div>
             </form>
         </div>
     <footer>
@@ -77,6 +78,7 @@
         const emailInput = document.getElementById('email');
         const password1Input = document.getElementById('password1');
         const password2Input = document.getElementById('password2');
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
         regBtn.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent the form from submitting by default
@@ -85,10 +87,33 @@
             const email = emailInput.value;
             const password1 = password1Input.value;
             const password2 = password2Input.value;
-
-            if (password1 !== password2) {
-                alert("Passwords do not match.");
-                return; // Stop the registration process
+            const errorMessage = document.getElementById('error');
+            
+            if(!name){
+                nameInput.style.border = "2px solid #ff6961";
+                errorMessage.textContent = "Please enter a name";
+                errorMessage.style.display = "flex";
+                e.preventDefault(); // Prevent the form from submitting by default
+            } else if(!email || !emailPattern.test(email)){
+                emailInput.style.border = "2px solid #ff6961";
+                nameInput.style.border = "initial";
+                errorMessage.textContent = "Please enter a valid email";
+                errorMessage.style.display = "flex";
+                e.preventDefault(); // Prevent the form from submitting by default
+            } else if(!password1 || !password2){
+                password1Input.style.border = "2px solid #ff6961";
+                password2Input.style.border = "2px solid #ff6961";
+                emailInput.style.border = "initial";
+                errorMessage.textContent = "A password is required";
+                errorMessage.style.display = "flex";
+                e.preventDefault(); // Prevent the form from submitting by default
+            } else if (password1 !== password2 && password1.length >= 6) {
+                password1Input.style.border = "2px solid #ff6961";
+                password2Input.style.border = "2px solid #ff6961";
+                emailInput.style.border = "initial";
+                errorMessage.textContent = "Passwords do not match";
+                errorMessage.style.display = "flex";
+                e.preventDefault(); // Prevent the form from submitting by default
             }
 
             createUserWithEmailAndPassword(auth, email, password1)
@@ -100,6 +125,7 @@
                         const userData = {
                             name: name,
                             email: email,
+                            password: password1,
                             profileCreated: false // Set to false initially
                         };
 
@@ -128,8 +154,18 @@
                 })
                 .catch((error) => {
                     const errorCode = error.code;
-                    const errorMessage = error.message;
+                    const errorDetails = error.message;
 
+                    console.log('Error code:', errorCode); // Log the error code
+                    console.log('Error details:', errorDetails); // Log the error details
+                    if (errorCode === 'auth/weak-password' && password1 == password2) {
+                        password1Input.style.border = "2px solid #ff6961";
+                        password2Input.style.border = "2px solid #ff6961";
+                        emailInput.style.border = "initial";
+                        errorMessage.textContent = "Password length must be at least 6";
+                        errorMessage.style.display = "flex";
+                        e.preventDefault(); // Prevent the form from submitting by default
+                    }
                     // ..
             });
         })
