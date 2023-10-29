@@ -28,20 +28,24 @@
             <form action="">
                 <h1>Register</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Name" id="name" required>
+                    <input type="text" id="name" required>
                     <i class="ri-user-line"></i>
+                    <label for="name" class="input-label">Name</label>
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="Email" id="email" required>
+                    <input type="text" id="email" required>
                     <i class="ri-mail-line"></i>
+                    <label for="email" class="input-label">Email</label>
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder="Password" id="password1" required>
+                    <input type="password" id="password1" required>
                     <i class="ri-lock-2-line"></i>
+                    <label for="password1" class="input-label">Password</label>
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder="Confirm Password" id="password2" required>
+                    <input type="password" id="password2" required>
                     <i class="ri-lock-2-line"></i>
+                    <label for="password2" class="input-label">Confirm Password</label>
                 </div>
                 <button type="submit" class="btn" id="regBtn">Register</button>
                 <div class="login-link">
@@ -89,36 +93,41 @@
             const password2 = password2Input.value;
             const errorMessage = document.getElementById('error');
             
-            if(!name){
-                nameInput.style.border = "2px solid #ff6961";
-                errorMessage.textContent = "Please enter a name";
-                errorMessage.style.display = "flex";
-                e.preventDefault(); // Prevent the form from submitting by default
-                return;
-            } else if(!email || !emailPattern.test(email)){
-                emailInput.style.border = "2px solid #ff6961";
-                nameInput.style.border = "initial";
-                errorMessage.textContent = "Please enter a valid email";
-                errorMessage.style.display = "flex";
-                e.preventDefault(); // Prevent the form from submitting by default
-                return;
-            } else if(!password1 || !password2){
-                password1Input.style.border = "2px solid #ff6961";
-                password2Input.style.border = "2px solid #ff6961";
-                emailInput.style.border = "initial";
-                errorMessage.textContent = "A password is required";
-                errorMessage.style.display = "flex";
-                e.preventDefault(); // Prevent the form from submitting by default
-                return;
-            } else if (password1 !== password2 && password1.length >= 6) {
-                password1Input.style.border = "2px solid #ff6961";
-                password2Input.style.border = "2px solid #ff6961";
-                emailInput.style.border = "initial";
-                errorMessage.textContent = "Passwords do not match";
-                errorMessage.style.display = "flex";
-                e.preventDefault(); // Prevent the form from submitting by default
-                return;
+            switch (true) {
+                case !name:
+                    nameInput.style.border = "2px solid #ff6961";
+                    errorMessage.textContent = "Please enter a name";
+                    errorMessage.style.display = "flex";
+                    e.preventDefault();
+                    break;
+                
+                case (!email || !emailPattern.test(email)):
+                    emailInput.style.border = "2px solid #ff6961";
+                    nameInput.style.border = "initial";
+                    errorMessage.textContent = "Please enter a valid email";
+                    errorMessage.style.display = "flex";
+                    e.preventDefault();
+                    break;
+
+                case (!password1 || !password2):
+                    password1Input.style.border = "2px solid #ff6961";
+                    password2Input.style.border = "2px solid #ff6961";
+                    emailInput.style.border = "initial";
+                    errorMessage.textContent = "A password is required";
+                    errorMessage.style.display = "flex";
+                    e.preventDefault();
+                    break;
+
+                case (password1 !== password2 && password1.length >= 6):
+                    password1Input.style.border = "2px solid #ff6961";
+                    password2Input.style.border = "2px solid #ff6961";
+                    emailInput.style.border = "initial";
+                    errorMessage.textContent = "Passwords do not match";
+                    errorMessage.style.display = "flex";
+                    e.preventDefault();
+                    break;
             }
+
 
             createUserWithEmailAndPassword(auth, email, password1)
                 .then((userCredential) => {
