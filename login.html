@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="en">
+
 <head>
     <title>Login Page</title>
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
@@ -11,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
@@ -24,30 +26,30 @@
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
     </header>
-        <div class="wrapper">
-            <form action="">
-                <h1>Sign In</h1>
-                <div class="input-box">
-                    <input type="text" id="email" required>
-                    <i class="ri-mail-line"></i>
-                    <label for="email" class="input-label">Email</label>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="password" required>
-                    <i class="ri-lock-2-line"></i>
-                    <label for="password" class="input-label">Password</label>
-                </div>
-                <div class="remember-forgot">
-                    <label><input type="checkbox">Remeber Me</label>
-                    <a href="#">Forgot password?</a>
-                </div>
-                <button type="submit" class="btn" id="loginBtn">Login</button>
-                <div class="register-link">
-                    <p>Don't have an account? <a href="register.html">Register</a></p>
-                </div>
-                <div class="error-message" id="error"></div>
-            </form>
-        </div>
+    <div class="wrapper">
+        <form action="">
+            <h1>Sign In</h1>
+            <div class="input-box">
+                <input type="text" id="email" required>
+                <i class="ri-mail-line"></i>
+                <label for="email" class="input-label">Email</label>
+            </div>
+            <div class="input-box">
+                <input type="password" id="password" required>
+                <i class="ri-lock-2-line"></i>
+                <label for="password" class="input-label">Password</label>
+            </div>
+            <div class="remember-forgot">
+                <label><input type="checkbox">Remeber Me</label>
+                <a href="#">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn" id="loginBtn">Login</button>
+            <div class="register-link">
+                <p>Don't have an account? <a href="register.html">Register</a></p>
+            </div>
+            <div class="error-message" id="error"></div>
+        </form>
+    </div>
     <footer>
     </footer>
     <!--js link-->
@@ -77,38 +79,39 @@
         const passwordInput = document.getElementById('password');
         const errorMessage = document.getElementById('error');
 
-        loginBtn.addEventListener('click' ,(e) => {
+        loginBtn.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent the form from submitting by default
             // Get the values of the input fields
             const email = emailInput.value;
             const password = passwordInput.value;
 
             signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
 
-                const dt = new Date();
-                update(ref(database, 'users/' + user.uid),{
-                    last_login: dt,
+                    const dt = new Date();
+                    update(ref(database, 'users/' + user.uid), {
+                        last_login: dt,
+                    })
+                    // ...
+                    alert("user logged in");
+                    window.location.href = "portfolio.html";
                 })
-                // ...
-                alert("user logged in");
-                window.location.href = "portfolio.html";
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorDetails = error.message;
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorDetails = error.message;
 
-                console.log('Error code:', errorCode); // Log the error code
-                console.log('Error details:', errorDetails); // Log the error details
-                errorMessage.textContent = "Invalid login credentials";
-                emailInput.style.border = "2px solid #ff6961";
-                passwordInput.style.border = "2px solid #ff6961";
-                errorMessage.style.display = "flex";
-                e.preventDefault();
-            });
+                    console.log('Error code:', errorCode); // Log the error code
+                    console.log('Error details:', errorDetails); // Log the error details
+                    errorMessage.textContent = "Invalid login credentials";
+                    emailInput.style.border = "2px solid #ff6961";
+                    passwordInput.style.border = "2px solid #ff6961";
+                    errorMessage.style.display = "flex";
+                    e.preventDefault();
+                });
         })
     </script>
 </body>
+
 </html>

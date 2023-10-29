@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="en">
+
 <head>
     <title>Portfolio Page</title>
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
@@ -11,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
@@ -40,7 +42,7 @@
             <div class="input-box">
                 <input type="text" id="tag" required>
                 <i class="ri-profile-line"></i>
-                <label for="tag" class="input-label">Profile Tag</label>            
+                <label for="tag" class="input-label">Profile Tag</label>
             </div>
             <div class="input-box">
                 <input type="text" id="email" required value="">
@@ -98,57 +100,57 @@
             // Check the user's login status
             onAuthStateChanged(auth, (user) => {
                 if (user) {
-                // User is logged in, show the "Logout" link and hide "Sign In" and "Register"
-                signInLink.style.display = "none";
-                profileCircle.style.display = "flex";
-                logoutLink.style.display = "flex"; // Display the "Logout" link
-                alert("Let's create a profile");
+                    // User is logged in, show the "Logout" link and hide "Sign In" and "Register"
+                    signInLink.style.display = "none";
+                    profileCircle.style.display = "flex";
+                    logoutLink.style.display = "flex"; // Display the "Logout" link
+                    alert("Let's create a profile");
 
-                // Fetch the user's name from the database
-                const userRef = ref(database, 'users/' + user.uid);
+                    // Fetch the user's name from the database
+                    const userRef = ref(database, 'users/' + user.uid);
 
-                get(userRef).then((snapshot) => {
-                    if (snapshot.exists()) {
-                    // Get the user's data from the snapshot
-                    const userData = snapshot.val();
+                    get(userRef).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            // Get the user's data from the snapshot
+                            const userData = snapshot.val();
 
-                    // Check if the user's data contains a name
-                    if (userData.name) {
-                        const userFirstName = userData.name; // Assuming the user's name is stored under "name"
-                        const firstInitial = userFirstName.charAt(0).toUpperCase();
+                            // Check if the user's data contains a name
+                            if (userData.name) {
+                                const userFirstName = userData.name; // Assuming the user's name is stored under "name"
+                                const firstInitial = userFirstName.charAt(0).toUpperCase();
 
-                        // Set the glowing circle's content to the first initial
-                        document.getElementById('name').value = userData.name;
-                        document.getElementById('email').value = userData.email;
-                        userInitial.textContent = firstInitial;
-                    }
-                    }
-                });
+                                // Set the glowing circle's content to the first initial
+                                document.getElementById('name').value = userData.name;
+                                document.getElementById('email').value = userData.email;
+                                userInitial.textContent = firstInitial;
+                            }
+                        }
+                    });
                 } else {
-                // User is not logged in, show "Sign In" and "Register" and hide "Logout"
-                signInLink.style.display = "flex";
-                profileCircle.style.display = "none";
-                logoutLink.style.display = "none"; // Hide the "Logout" link
+                    // User is not logged in, show "Sign In" and "Register" and hide "Logout"
+                    signInLink.style.display = "flex";
+                    profileCircle.style.display = "none";
+                    logoutLink.style.display = "none"; // Hide the "Logout" link
 
-                // Clear the glowing circle content
-                userInitial.textContent = '';
+                    // Clear the glowing circle content
+                    userInitial.textContent = '';
                 }
             });
         }
 
         // Function to handle user logout
         function handleLogout() {
-        // Use the signOut function from the Firebase Auth module to log the user out
-        signOut(auth)
-            .then(() => {
-                // Log out was successful
-                console.log("User logged out.");
-                window.location.href = "login.html";
-            })
-            .catch((error) => {
-                // Handle any errors that may occur during logout
-                console.error("Error logging out:", error);
-            });
+            // Use the signOut function from the Firebase Auth module to log the user out
+            signOut(auth)
+                .then(() => {
+                    // Log out was successful
+                    console.log("User logged out.");
+                    window.location.href = "login.html";
+                })
+                .catch((error) => {
+                    // Handle any errors that may occur during logout
+                    console.error("Error logging out:", error);
+                });
         }
 
         // Attach the handleLogout function to the "Logout" link's click event
@@ -160,11 +162,58 @@
             });
         }
 
-        saveBtn.addEventListener('click' ,(e) => {
+        const nameInput = document.getElementById('name');
+        const profileTag = document.getElementById('tag');
+        const emailInput = document.getElementById('email');
+        const facebookInput = document.getElementById('facebook');
+        const XInput = document.getElementById('X');
+        const instaInput = document.getElementById('instagram');
+
+        saveBtn.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent the form from submitting by default
-        
-        })
+
+            // Get the currently authenticated user
+            const user = auth.currentUser;
+
+            if (user) {
+                const name = nameInput.value;
+                const tag = profileTag.value;
+                const email = emailInput.value;
+                const facebook = facebookInput.value;
+                const X = XInput.value;
+                const insta = instaInput.value;
+
+                // Create an object with the data to update
+                const userData = {
+                    name: name,
+                    tag: tag,
+                    email: email,
+                    facebook: facebook,
+                    X: X,
+                    insta: insta,
+                    profileCreated: true
+                };
+
+                // Update the user data
+                set(ref(database, 'users/' + user.uid), userData)
+                    .then(() => {
+                        // Data has been written to the database
+                        console.log('User data updated in the database.');
+                        alert('Profile successfully created!');
+                        window.location.href = "portfolio.html";
+                    })
+                    .catch((error) => {
+                        console.error('Error writing user data:', error);
+                        alert('Error during registration.');
+                    });
+            } else {
+                console.error('User not found.');
+                alert('User not found.');
+            }
+        });
+
         updateSignInLinks();
     </script>
 </body>
+
 </html>

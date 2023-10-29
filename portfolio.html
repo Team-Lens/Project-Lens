@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="en">
+
 <head>
     <title>Portfolio Page</title>
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
@@ -12,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
@@ -108,33 +110,57 @@
         function updateSignInLinks() {
             const signInLink = document.querySelector(".user");
             const logoutLink = document.querySelector(".logout");
-
+            const profileCircle = document.querySelector(".profile-circle");
+            const userInitial = document.getElementById("user-initial");
             // Check the user's login status
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     // User is logged in, show the "Logout" link and hide "Sign In" and "Register"
                     signInLink.style.display = "none";
+                    profileCircle.style.display = "flex";
                     logoutLink.style.display = "flex"; // Display the "Logout" link
+                    // Fetch the user's name from the database
+                    const userRef = ref(database, 'users/' + user.uid);
+
+                    get(userRef).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            // Get the user's data from the snapshot
+                            const userData = snapshot.val();
+
+                            // Check if the user's data contains a name
+                            if (userData.name) {
+                                const userFirstName = userData.name; // Assuming the user's name is stored under "name"
+                                const firstInitial = userFirstName.charAt(0).toUpperCase();
+
+                                // Set the glowing circle's content to the first initial
+                                userInitial.textContent = firstInitial;
+                            }
+                        }
+                    });
                 } else {
                     // User is not logged in, show "Sign In" and "Register" and hide "Logout"
                     signInLink.style.display = "flex";
+                    profileCircle.style.display = "none";
                     logoutLink.style.display = "none"; // Hide the "Logout" link
+
+                    // Clear the glowing circle content
+                    userInitial.textContent = '';
                 }
             });
         }
         // Function to handle user logout
         function handleLogout() {
-        // Use the signOut function from the Firebase Auth module to log the user out
-        signOut(auth)
-            .then(() => {
-                // Log out was successful
-                console.log("User logged out.");
-                window.location.href = "login.html";
-            })
-            .catch((error) => {
-                // Handle any errors that may occur during logout
-                console.error("Error logging out:", error);
-            });
+            // Use the signOut function from the Firebase Auth module to log the user out
+            signOut(auth)
+                .then(() => {
+                    // Log out was successful
+                    console.log("User logged out.");
+                    window.location.href = "login.html";
+                })
+                .catch((error) => {
+                    // Handle any errors that may occur during logout
+                    console.error("Error logging out:", error);
+                });
         }
 
 
@@ -152,18 +178,16 @@
             if (user) {
                 // User is logged in
 
-                // Check if the user has created a profile (you should adapt this to your database structure)
+                // Check if the user has created a profile
                 const database = getDatabase();
-                const profileRef = ref(database, `userProfiles/${user.uid}`);
+                const profileRef = ref(database, `users/${user.uid}/profileCreated`);
 
                 get(profileRef)
                     .then((snapshot) => {
-                        if (snapshot.exists()) {
-                            // User has a profile
-                            // Redirect to the profile page
-                            window.location.href = "profile.html";
+                        if (snapshot.exists() && snapshot.val() === true) {
+                            console.log('logged in, validated');
                         } else {
-                            // User has not created a profile
+                            // User has not created a profile, redirect to the createProfile page
                             window.location.href = "createProfile.html";
                         }
                     })
@@ -175,8 +199,10 @@
             }
         });
 
+
         // Call the function to update the links when the page loads
         updateSignInLinks();
     </script>
 </body>
+
 </html>

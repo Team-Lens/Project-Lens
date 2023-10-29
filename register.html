@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="en">
+
 <head>
     <title>Register Page</title>
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
@@ -11,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
@@ -24,43 +26,43 @@
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
     </header>
-        <div class="wrapper">
-            <form action="">
-                <h1>Register</h1>
-                <div class="input-box">
-                    <input type="text" id="name" required>
-                    <i class="ri-user-line"></i>
-                    <label for="name" class="input-label">Name</label>
-                </div>
-                <div class="input-box">
-                    <input type="text" id="email" required>
-                    <i class="ri-mail-line"></i>
-                    <label for="email" class="input-label">Email</label>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="password1" required>
-                    <i class="ri-lock-2-line"></i>
-                    <label for="password1" class="input-label">Password</label>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="password2" required>
-                    <i class="ri-lock-2-line"></i>
-                    <label for="password2" class="input-label">Confirm Password</label>
-                </div>
-                <button type="submit" class="btn" id="regBtn">Register</button>
-                <div class="login-link">
-                    <p>Already have an account? <a href="login.html">Sign In</a></p>
-                </div>
-                <div class="error-message" id="error"></div>
-            </form>
-        </div>
+    <div class="wrapper">
+        <form action="">
+            <h1>Register</h1>
+            <div class="input-box">
+                <input type="text" id="name" required>
+                <i class="ri-user-line"></i>
+                <label for="name" class="input-label">Name</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="email" required>
+                <i class="ri-mail-line"></i>
+                <label for="email" class="input-label">Email</label>
+            </div>
+            <div class="input-box">
+                <input type="password" id="password1" required>
+                <i class="ri-lock-2-line"></i>
+                <label for="password1" class="input-label">Password</label>
+            </div>
+            <div class="input-box">
+                <input type="password" id="password2" required>
+                <i class="ri-lock-2-line"></i>
+                <label for="password2" class="input-label">Confirm Password</label>
+            </div>
+            <button type="submit" class="btn" id="regBtn">Register</button>
+            <div class="login-link">
+                <p>Already have an account? <a href="login.html">Sign In</a></p>
+            </div>
+            <div class="error-message" id="error"></div>
+        </form>
+    </div>
     <footer>
     </footer>
     <!--js link-->
     <script type="text/javascript" src="./javascript/navbar.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-        import { getDatabase, set, ref, get, onValue, update} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+        import { getDatabase, set, ref, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -92,42 +94,49 @@
             const password1 = password1Input.value;
             const password2 = password2Input.value;
             const errorMessage = document.getElementById('error');
-            
-            switch (true) {
-                case !name:
-                    nameInput.style.border = "2px solid #ff6961";
-                    errorMessage.textContent = "Please enter a name";
-                    errorMessage.style.display = "flex";
-                    e.preventDefault();
-                    break;
-                
-                case (!email || !emailPattern.test(email)):
-                    emailInput.style.border = "2px solid #ff6961";
-                    nameInput.style.border = "initial";
-                    errorMessage.textContent = "Please enter a valid email";
-                    errorMessage.style.display = "flex";
-                    e.preventDefault();
-                    break;
 
-                case (!password1 || !password2):
-                    password1Input.style.border = "2px solid #ff6961";
-                    password2Input.style.border = "2px solid #ff6961";
-                    emailInput.style.border = "initial";
-                    errorMessage.textContent = "A password is required";
-                    errorMessage.style.display = "flex";
-                    e.preventDefault();
-                    break;
-
-                case (password1 !== password2 && password1.length >= 6):
-                    password1Input.style.border = "2px solid #ff6961";
-                    password2Input.style.border = "2px solid #ff6961";
-                    emailInput.style.border = "initial";
-                    errorMessage.textContent = "Passwords do not match";
-                    errorMessage.style.display = "flex";
-                    e.preventDefault();
-                    break;
+            // Validation checks
+            if (!name) {
+                nameInput.style.border = "2px solid #ff6961";
+                errorMessage.textContent = "Please enter a name";
+                errorMessage.style.display = "flex";
+                return;
             }
 
+            if (!email || !emailPattern.test(email)) {
+                emailInput.style.border = "2px solid #ff6961";
+                nameInput.style.border = "initial";
+                errorMessage.textContent = "Please enter a valid email";
+                errorMessage.style.display = "flex";
+                return;
+            }
+
+            if (!password1 || !password2) {
+                password1Input.style.border = "2px solid #ff6961";
+                password2Input.style.border = "2px solid #ff6961";
+                emailInput.style.border = "initial";
+                errorMessage.textContent = "A password is required";
+                errorMessage.style.display = "flex";
+                return;
+            }
+
+            if (password1 !== password2) {
+                password1Input.style.border = "2px solid #ff6961";
+                password2Input.style.border = "2px solid #ff6961";
+                emailInput.style.border = "initial";
+                errorMessage.textContent = "Passwords do not match";
+                errorMessage.style.display = "flex";
+                return;
+            }
+
+            if (password1.length < 6) {
+                password1Input.style.border = "2px solid #ff6961";
+                password2Input.style.border = "2px solid #ff6961";
+                emailInput.style.border = "initial";
+                errorMessage.textContent = "Password length must be at least 6";
+                errorMessage.style.display = "flex";
+                return;
+            }
 
             createUserWithEmailAndPassword(auth, email, password1)
                 .then((userCredential) => {
@@ -150,9 +159,6 @@
                             .then(() => {
                                 // Data has been written to the database
                                 console.log('User data written to the database.');
-
-                                // ...
-
                                 alert('User created! lets sign in.');
                                 window.location.href = "login.html";
                             })
@@ -171,18 +177,9 @@
 
                     console.log('Error code:', errorCode); // Log the error code
                     console.log('Error details:', errorDetails); // Log the error details
-                    if (errorCode === 'auth/weak-password' && password1 == password2) {
-                        password1Input.style.border = "2px solid #ff6961";
-                        password2Input.style.border = "2px solid #ff6961";
-                        emailInput.style.border = "initial";
-                        errorMessage.textContent = "Password length must be at least 6";
-                        errorMessage.style.display = "flex";
-                        e.preventDefault(); // Prevent the form from submitting by default
-                        return;
-                    }
-                    // ..
                 });
         })
     </script>
 </body>
+
 </html>
