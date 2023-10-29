@@ -44,6 +44,11 @@ body{
     font-size: 16px;
     padding: 20px 45px 20px 20px;
 }
+.input-box input:focus ~ .input-label,
+.input-box input:valid ~ .input-label {
+    top: -0.02rem;
+    font-size: 12px;
+}
 .input-box input::placeholder{
     color: var(--bg-color);
 }
@@ -54,6 +59,15 @@ body{
     top: 50%;
     transform: translateY(-50%);
     font-size: 25px;
+}
+.input-box .input-label {
+    font-size: 16px;
+    color: var(--bg-color);
+    position: absolute;
+    pointer-events: none;
+    left: 22px;
+    top: 12px;
+    transition: 0.2s;
 }
 .wrapper .btn{
     width: 100%;

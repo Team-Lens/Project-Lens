@@ -151,7 +151,6 @@
             });
         }
 
-
         // Attach the handleLogout function to the "Logout" link's click event
         const logoutLink = document.querySelector(".logout");
         if (logoutLink) {
@@ -161,7 +160,10 @@
             });
         }
 
-        // Call the function to update the links when the page loads
+        saveBtn.addEventListener('click' ,(e) => {
+            e.preventDefault(); // Prevent the form from submitting by default
+        
+        })
         updateSignInLinks();
     </script>
 </body>
