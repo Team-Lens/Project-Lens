@@ -2,8 +2,9 @@
 <html lang="en">
 
 <head>
-    <title>Index Page</title>
+    <title>Portfolio Page</title>
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="./css/createProfile.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -16,9 +17,9 @@
     <header>
         <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
         <ul class="navbar">
-            <li><a class="active" href="index.html">Explore</a></li>
+            <li><a href="index.html">Explore</a></li>
             <li><a href="social.html">Social</a></li>
-            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a class="active" href="portfolio.html">Portfolio</a></li>
         </ul>
         <div class="main">
             <a href="login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
@@ -29,10 +30,47 @@
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
     </header>
-    <footer>
-    </footer>
+    <div class="wrapper">
+        <form action="">
+            <h1>Set Up Profile</h1>
+            <h2>Personal info</h2>
+            <div class="input-box">
+                <input type="text" id="name" required value="">
+                <i class="ri-user-line"></i>
+                <label for="name" class="input-label">Name</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="tag" required>
+                <i class="ri-profile-line"></i>
+                <label for="tag" class="input-label">Profile Tag</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="email" required value="">
+                <i class="ri-mail-line"></i>
+                <label for="email" class="input-label">Email</label>
+            </div>
+            <h2>Socials</h2>
+            <div class="input-box">
+                <input type="text" id="facebook" required>
+                <i class="ri-facebook-box-line"></i>
+                <label for="facebook" class="input-label">Facebook Link</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="X" required>
+                <i class="ri-twitter-x-line"></i>
+                <label for="X" class="input-label">X Link</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="instagram" required>
+                <i class="ri-instagram-line"></i>
+                <label for="instagram" class="input-label">Instagram Link</label>
+            </div>
+            <button type="submit" class="btn" id="saveBtn">Save Changes</button>
+        </form>
+    </div>
     <!--js link-->
     <script type="text/javascript" src="./javascript/navbar.js"></script>
+    <script type="text/javascript" src="./javascript/lightbox-plus-jquery.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
@@ -59,7 +97,6 @@
             const logoutLink = document.querySelector(".logout");
             const profileCircle = document.querySelector(".profile-circle");
             const userInitial = document.getElementById("user-initial");
-
             // Check the user's login status
             onAuthStateChanged(auth, (user) => {
                 if (user) {
@@ -67,6 +104,7 @@
                     signInLink.style.display = "none";
                     profileCircle.style.display = "flex";
                     logoutLink.style.display = "flex"; // Display the "Logout" link
+                    alert("Let's create a profile");
 
                     // Fetch the user's name from the database
                     const userRef = ref(database, 'users/' + user.uid);
@@ -82,6 +120,8 @@
                                 const firstInitial = userFirstName.charAt(0).toUpperCase();
 
                                 // Set the glowing circle's content to the first initial
+                                document.getElementById('name').value = userData.name;
+                                document.getElementById('email').value = userData.email;
                                 userInitial.textContent = firstInitial;
                             }
                         }
@@ -113,7 +153,6 @@
                 });
         }
 
-
         // Attach the handleLogout function to the "Logout" link's click event
         const logoutLink = document.querySelector(".logout");
         if (logoutLink) {
@@ -123,7 +162,56 @@
             });
         }
 
-        // Call the function to update the links when the page loads
+        const nameInput = document.getElementById('name');
+        const profileTag = document.getElementById('tag');
+        const emailInput = document.getElementById('email');
+        const facebookInput = document.getElementById('facebook');
+        const XInput = document.getElementById('X');
+        const instaInput = document.getElementById('instagram');
+
+        saveBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent the form from submitting by default
+
+            // Get the currently authenticated user
+            const user = auth.currentUser;
+
+            if (user) {
+                const name = nameInput.value;
+                const tag = profileTag.value;
+                const email = emailInput.value;
+                const facebook = facebookInput.value;
+                const X = XInput.value;
+                const insta = instaInput.value;
+
+                // Create an object with the data to update
+                const userData = {
+                    name: name,
+                    tag: tag,
+                    email: email,
+                    facebook: facebook,
+                    X: X,
+                    insta: insta,
+                    profileCreated: true
+                };
+
+                // Update the user data
+                set(ref(database, 'users/' + user.uid), userData)
+                    .then(() => {
+                        // Data has been written to the database
+                        console.log('User data updated in the database.');
+                        alert('Profile successfully created!');
+                        window.location.href = "portfolio.html";
+                    })
+                    .catch((error) => {
+                        console.error('Error writing user data:', error);
+                        alert('Error during registration.');
+                    });
+            } else {
+                console.error('User not found.');
+                alert('User not found.');
+            }
+        });
+
         updateSignInLinks();
     </script>
 </body>
