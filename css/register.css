@@ -54,7 +54,7 @@ body{
 }
 .input-box i{
     right: 20px;
-    color: var(--bg-color);
+    color: #222327;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -62,7 +62,7 @@ body{
 }
 .input-box .input-label {
     font-size: 16px;
-    color: var(--bg-color);
+    color: #222327;
     position: absolute;
     pointer-events: none;
     left: 22px;
