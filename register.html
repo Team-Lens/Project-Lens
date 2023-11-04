@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <title>Register Page</title>
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
     <link rel="stylesheet" type="text/css" href="./css/register.css">
@@ -26,8 +27,9 @@
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
     </header>
+    <div id="loader" class="center"></div>
     <div class="wrapper">
-        <form action="">
+        <form>
             <h1>Register</h1>
             <div class="input-box">
                 <input type="text" id="name" required>
@@ -59,7 +61,7 @@
     <footer>
     </footer>
     <!--js link-->
-    <script type="text/javascript" src="./javascript/navbar.js"></script>
+    <script src="./javascript/navbar.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, set, ref, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
@@ -114,6 +116,7 @@
             if (!password1 || !password2) {
                 password1Input.style.border = "2px solid #ff6961";
                 password2Input.style.border = "2px solid #ff6961";
+                nameInput.style.border = "initial";
                 emailInput.style.border = "initial";
                 errorMessage.textContent = "A password is required";
                 errorMessage.style.display = "flex";
@@ -123,6 +126,7 @@
             if (password1 !== password2) {
                 password1Input.style.border = "2px solid #ff6961";
                 password2Input.style.border = "2px solid #ff6961";
+                nameInput.style.border = "initial";
                 emailInput.style.border = "initial";
                 errorMessage.textContent = "Passwords do not match";
                 errorMessage.style.display = "flex";
@@ -132,6 +136,7 @@
             if (password1.length < 6) {
                 password1Input.style.border = "2px solid #ff6961";
                 password2Input.style.border = "2px solid #ff6961";
+                nameInput.style.border = "initial";
                 emailInput.style.border = "initial";
                 errorMessage.textContent = "Password length must be at least 6";
                 errorMessage.style.display = "flex";

@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <title>Portfolio Page</title>
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
     <link rel="stylesheet" type="text/css" href="./css/createProfile.css">
@@ -30,8 +31,9 @@
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
     </header>
+    <div id="loader" class="center"></div>
     <div class="wrapper">
-        <form action="">
+        <form>
             <h1>Set Up Profile</h1>
             <h2>Personal info</h2>
             <div class="input-box">
@@ -69,8 +71,8 @@
         </form>
     </div>
     <!--js link-->
-    <script type="text/javascript" src="./javascript/navbar.js"></script>
-    <script type="text/javascript" src="./javascript/lightbox-plus-jquery.min.js"></script>
+    <script src="./javascript/navbar.js"></script>
+    <script src="./javascript/lightbox-plus-jquery.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
