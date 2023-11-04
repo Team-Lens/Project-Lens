@@ -4,6 +4,7 @@ body{
     min-height: 100vh;
 }
 header{
+    user-select: none;
     position: absolute;
     width: 100%;
     top: 0;
