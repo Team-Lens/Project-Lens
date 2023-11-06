@@ -59,9 +59,11 @@
         </form>
     </div>
     <footer>
+        <a class="light-mode-btn" id="light-mode"><i class="ri-sun-line"></i></a>
+        <a class="dark-mode-btn" id="dark-mode"><i class="ri-moon-line"></i></a>
     </footer>
     <!--js link-->
-    <script src="./javascript/navbar.js"></script>
+    <script src="./javascript/default.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, set, ref, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
@@ -153,7 +155,7 @@
                             name: name,
                             email: email,
                             password: password1,
-                            profileCreated: false // Set to false initially
+                            profileCreated: false
                         };
 
                         // Log the user data to ensure it's correct
