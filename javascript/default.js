@@ -33,13 +33,13 @@ document.onreadystatechange = function () {
   }
 };
 
-// Select your HTML elements
+//Dark and light mode
 const lightMode = document.getElementById('lightMode');
 const darkMode = document.getElementById('darkMode');
 const lightModeBtns = document.querySelectorAll(".light-mode-btn");
 const darkModeBtns = document.querySelectorAll(".dark-mode-btn");
 
-// Function to toggle between light and dark modes
+// toggle between light and dark modes
 function toggleMode(isLightMode) {
   if (isLightMode) {
     document.documentElement.style.setProperty('--bg-color', '#fff');
@@ -62,14 +62,14 @@ function toggleMode(isLightMode) {
   }
 }
 
-// Check local storage for the user's preference
+// Check local storage
 const savedMode = localStorage.getItem('mode');
 
-// Initialize the mode based on the user's preference or default to light mode
+// Initialize the mode
 const isLightMode = savedMode === 'light';
 toggleMode(isLightMode);
 
-// Set the active button based on the mode preference
+// Set the active button
 if (isLightMode) {
   lightModeBtns.forEach(btn => {
     btn.style.display = "none";
@@ -86,7 +86,6 @@ if (isLightMode) {
   });
 }
 
-// Add event listeners to your mode buttons
 lightMode.addEventListener('click', () => {
   toggleMode(true);
   localStorage.setItem('mode', 'light');
