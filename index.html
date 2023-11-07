@@ -32,9 +32,11 @@
     </header>
     <div id="loader" class="center"></div>
     <footer>
+        <a class="light-mode-btn" id="lightMode"><i class="ri-sun-line"></i></a>
+        <a class="dark-mode-btn" id="darkMode"><i class="ri-moon-line"></i></a>
     </footer>
     <!--js link-->
-    <script src="./javascript/navbar.js"></script>
+    <script src="./javascript/default.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";

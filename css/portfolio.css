@@ -142,5 +142,7 @@
     line-height: 50px;
     border-radius: 50%;
     color: var(--text-color);
+    font-size: 20px;
     display: none;
+    cursor: pointer;
 }

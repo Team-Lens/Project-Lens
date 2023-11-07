@@ -82,10 +82,12 @@
         </div>
     </div>
     <footer>
-        <a class="gotopbtn" id="gotopbtn" href="#"><i class="ri-arrow-up-line"></i></a>
+        <a class="gotopbtn" id="gotopbtn"><i class="ri-arrow-up-line"></i></a>
+        <a class="light-mode-btn" id="lightMode"><i class="ri-sun-line"></i></a>
+        <a class="dark-mode-btn" id="darkMode"><i class="ri-moon-line"></i></a>
     </footer>
     <!--js link-->
-    <script src="./javascript/navbar.js"></script>
+    <script src="./javascript/default.js"></script>
     <script src="./javascript/portfolio.js"></script>
     <script src="./javascript/lightbox-plus-jquery.min.js"></script>
     <script type="module">
@@ -107,7 +109,6 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const auth = getAuth();
-
 
         function updateSignInLinks() {
             const signInLink = document.querySelector(".user");
@@ -200,7 +201,6 @@
                 // User is not logged in, handle as needed
             }
         });
-
 
         // Call the function to update the links when the page loads
         updateSignInLinks();

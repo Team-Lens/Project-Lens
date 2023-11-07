@@ -70,8 +70,12 @@
             <button type="submit" class="btn" id="saveBtn">Save Changes</button>
         </form>
     </div>
+    <footer>
+        <a class="light-mode-btn" id="lightMode"><i class="ri-sun-line"></i></a>
+        <a class="dark-mode-btn" id="darkMode"><i class="ri-moon-line"></i></a>
+    </footer>
     <!--js link-->
-    <script src="./javascript/navbar.js"></script>
+    <script src="./javascript/default.js"></script>
     <script src="./javascript/lightbox-plus-jquery.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
@@ -193,7 +197,7 @@
                     facebook: facebook,
                     X: X,
                     insta: insta,
-                    profileCreated: true
+                    profileCreated: true,
                 };
 
                 // Update the user data
