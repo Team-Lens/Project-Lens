@@ -1,31 +1,41 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-    list-style: none;
-    text-decoration: none;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  list-style: none;
+  text-decoration: none;
 }
-:root{
-    --bg-color: #222327;
-    --text-color: #fff;
-    --main-color: #5266d8;
+
+:root {
+  --bg-color: #222327;
+  --text-color: #fff;
+  --main-color: #5266d8;
+  --background-image-light: url('../pictures/register-light.jpg');
+  --background-image-dark: url('../pictures/register-dark.jpg');
+  --background-image-login-light: url('../pictures/login-light.jpg');
+  --background-image-login-dark: url('../pictures/login-dark.jpg');
 }
-html{
+
+html {
   scroll-behavior: smooth;
 }
-body{
-    color: var(--text-color);
-    background-color: var(--bg-color);
-    overflow-x: hidden;
+
+body {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  overflow-x: hidden;
 }
+
 #loader {
   border: 12px solid #f3f3f3;
+  background-color: var(--bg-color);
   border-radius: 50%;
   border-top: 12px solid #444444;
   width: 70px;
   height: 70px;
   animation: spin 1s linear infinite;
+  z-index: 999;
 }
 
 .center {
@@ -37,7 +47,13 @@ body{
   margin: auto;
 }
 
-.light-mode-btn{
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.light-mode-btn {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -54,7 +70,8 @@ body{
   font-size: 30px;
   cursor: pointer;
 }
-.dark-mode-btn{
+
+.dark-mode-btn {
   position: fixed;
   display: none;
   justify-content: center;
@@ -72,31 +89,25 @@ body{
   cursor: pointer;
 }
 
-@keyframes spin {
-  100% {
-      transform: rotate(360deg);
-  }
-}
 /*SCROLLBAR*/
 /* width */
 ::-webkit-scrollbar {
-    width: 7px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    border-radius: 10px;
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: hsl(0, 0%, 43%);;
-    border-radius: 10px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-color);
-  }
+  width: 7px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 43%);
+  ;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-color);
+}

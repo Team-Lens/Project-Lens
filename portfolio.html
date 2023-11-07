@@ -202,49 +202,6 @@
             }
         });
 
-        //light and dark mode
-        lightMode.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent the form from submitting by default
-
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    // User is logged in
-
-                    // Check if the user has created a profile
-                    const database = getDatabase();
-                    const profileRef = ref(database, `users/${user.uid}/darkMode`);
-                    const lightModeBtns = document.querySelectorAll(".light-mode-btn");
-                    const darkModeBtns = document.querySelectorAll(".dark-mode-btn");
-
-                    get(profileRef)
-                        .then((snapshot) => {
-                            if (snapshot.exists() && snapshot.val() === true) {
-                                // Set display property for light-mode buttons
-                                lightModeBtns.forEach(btn => {
-                                    btn.style.display = "none";
-                                });
-
-                                // Set display property for dark-mode buttons
-                                darkModeBtns.forEach(btn => {
-                                    btn.style.display = "flex";
-                                });
-                            }
-                            else if (snapshot.exists() && snapshot.val() === false) {
-                                document.querySelector(".light-mode-btn").style.display = "flex";
-                                document.querySelector(".dark-mode-btn").style.display = "none";
-                            } else {
-
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error checking profile:", error);
-                        });
-                } else {
-                    // User is not logged in, handle as needed
-                }
-            });
-        })
-
         // Call the function to update the links when the page loads
         updateSignInLinks();
     </script>
