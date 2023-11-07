@@ -34,7 +34,6 @@ body{
     background: rgb(232, 240, 254);
     border: none;
     outline: none;
-    border: 2px solid var(--text-color);
     border-radius: 10px;
     font-size: 16px;
     padding: 20px 45px 10px 20px;
