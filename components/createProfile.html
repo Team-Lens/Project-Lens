@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Portfolio Page</title>
-    <link rel="stylesheet" type="text/css" href="./css/navbar.css">
-    <link rel="stylesheet" type="text/css" href="./css/createProfile.css">
+    <title>Create Profile Page</title>
+    <link rel="stylesheet" type="text/css" href="../css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../css/createProfile.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -16,15 +16,15 @@
 
 <body>
     <header>
-        <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
+        <a href="../index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
         <ul class="navbar">
-            <li><a href="index.html">Explore</a></li>
-            <li><a href="social.html">Social</a></li>
-            <li><a class="active" href="portfolio.html">Portfolio</a></li>
+            <li><a href="../index.html">Explore</a></li>
+            <li><a href="../social.html">Social</a></li>
+            <li><a class="active" href="../portfolio.html">Portfolio</a></li>
         </ul>
         <div class="main">
-            <a href="login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
-            <a href="portfolio.html" class="profile-circle">
+            <a href="../login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
+            <a href="../portfolio.html" class="profile-circle">
                 <i class="glowing-circle" id="user-initial"></i>
             </a>
             <a href="#" class="logout">Logout</a>
@@ -75,8 +75,8 @@
         <a class="dark-mode-btn" id="darkMode"><i class="ri-moon-line"></i></a>
     </footer>
     <!--js link-->
-    <script src="./javascript/default.js"></script>
-    <script src="./javascript/lightbox-plus-jquery.min.js"></script>
+    <script src="../javascript/default.js"></script>
+    <script src="../javascript/lightbox-plus-jquery.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
@@ -140,6 +140,7 @@
 
                     // Clear the glowing circle content
                     userInitial.textContent = '';
+                    window.location.href = "../login.html";
                 }
             });
         }
@@ -151,7 +152,7 @@
                 .then(() => {
                     // Log out was successful
                     console.log("User logged out.");
-                    window.location.href = "login.html";
+                    window.location.href = "../login.html";
                 })
                 .catch((error) => {
                     // Handle any errors that may occur during logout
@@ -206,7 +207,7 @@
                         // Data has been written to the database
                         console.log('User data updated in the database.');
                         alert('Profile successfully created!');
-                        window.location.href = "portfolio.html";
+                        window.location.href = "../portfolio.html";
                     })
                     .catch((error) => {
                         console.error('Error writing user data:', error);
