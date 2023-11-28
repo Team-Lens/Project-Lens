@@ -29,7 +29,7 @@
     background: var(--main-color);
     border-radius: 40px;
     font-size: 19px;
-    color: var(--text-color);
+    color: #fff;
     letter-spacing: 1px;
     user-select: none;
 }
@@ -141,8 +141,8 @@
     text-align: center;
     line-height: 50px;
     border-radius: 50%;
-    color: var(--text-color);
-    font-size: 20px;
+    color: var(--bg-color);
+    font-size: 30px;
     display: none;
     cursor: pointer;
 }

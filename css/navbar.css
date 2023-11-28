@@ -84,6 +84,7 @@ header .navbar a.active{
     height: 100%;
     font-size: 20px;
     background-color: var(--main-color);
+    color: #fff;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -91,7 +92,7 @@ header .navbar a.active{
     font-style:normal
 }
 a.profile-circle:hover{
-    color: var(--text-color);
+    color: #fff;
 }
 /* */
 #menu-icon{
@@ -133,17 +134,18 @@ a.profile-circle:hover{
         transition: all .50s ease;
     }
     header .navbar a{
+        color: #fff;
         display: block;
         margin: 12px 0;
         padding: 0px 25px;
         transition: all .50s ease;
     }
     header .navbar a:hover{
-        color: var(--text-color);
-        transform: translateY(3px);
+        color: #252525;
+        transform: translateY(2px);
     }
     header .navbar a.active{
-        color: var(--bg-color);
+        color: #252525;
     }
     header .navbar.open{
         right: 2%;

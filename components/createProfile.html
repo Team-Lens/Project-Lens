@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Profile Page</title>
+    <link rel="stylesheet" type="text/css" href="../css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../css/createProfile.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <a href="../index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
+        <ul class="navbar">
+            <li><a href="../index.html">Explore</a></li>
+            <li><a href="../social.html">Social</a></li>
+            <li><a class="active" href="../portfolio.html">Portfolio</a></li>
+        </ul>
+        <div class="main">
+            <a href="../login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
+            <a href="../portfolio.html" class="profile-circle">
+                <i class="glowing-circle" id="user-initial"></i>
+            </a>
+            <a href="#" class="logout">Logout</a>
+            <div class="bx bx-menu" id="menu-icon"></div>
+        </div>
+    </header>
+    <div id="loader" class="center"></div>
+    <div class="wrapper">
+        <form>
+            <h1>Set Up Profile</h1>
+            <h2>Personal info</h2>
+            <div class="input-box">
+                <input type="text" id="name" required value="">
+                <i class="ri-user-line"></i>
+                <label for="name" class="input-label">Name</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="tag" required>
+                <i class="ri-profile-line"></i>
+                <label for="tag" class="input-label">Profile Tag</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="email" required value="">
+                <i class="ri-mail-line"></i>
+                <label for="email" class="input-label">Email</label>
+            </div>
+            <h2>Socials</h2>
+            <div class="input-box">
+                <input type="text" id="facebook" required>
+                <i class="ri-facebook-box-line"></i>
+                <label for="facebook" class="input-label">Facebook Link</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="X" required>
+                <i class="ri-twitter-x-line"></i>
+                <label for="X" class="input-label">X Link</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="instagram" required>
+                <i class="ri-instagram-line"></i>
+                <label for="instagram" class="input-label">Instagram Link</label>
+            </div>
+            <button type="submit" class="btn" id="saveBtn">Save Changes</button>
+        </form>
+    </div>
+    <footer>
+        <a class="light-mode-btn" id="lightMode"><i class="ri-sun-line"></i></a>
+        <a class="dark-mode-btn" id="darkMode"><i class="ri-moon-line"></i></a>
+    </footer>
+    <!--js link-->
+    <script src="../javascript/default.js"></script>
+    <script src="../javascript/lightbox-plus-jquery.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqEinFNEbT60fxg_ig9AuadPQJjt48UXo",
+            authDomain: "project-lens-a4781.firebaseapp.com",
+            databaseURL: "https://project-lens-a4781-default-rtdb.firebaseio.com",
+            projectId: "project-lens-a4781",
+            storageBucket: "project-lens-a4781.appspot.com",
+            messagingSenderId: "498275826443",
+            appId: "1:498275826443:web:54c54f5fdc7925d50e400e",
+            measurementId: "G-N91T52EGWC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+
+
+        function updateSignInLinks() {
+            const signInLink = document.querySelector(".user");
+            const logoutLink = document.querySelector(".logout");
+            const profileCircle = document.querySelector(".profile-circle");
+            const userInitial = document.getElementById("user-initial");
+            // Check the user's login status
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // User is logged in, show the "Logout" link and hide "Sign In" and "Register"
+                    signInLink.style.display = "none";
+                    profileCircle.style.display = "flex";
+                    logoutLink.style.display = "flex"; // Display the "Logout" link
+                    alert("Let's create a profile");
+
+                    // Fetch the user's name from the database
+                    const userRef = ref(database, 'users/' + user.uid);
+
+                    get(userRef).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            // Get the user's data from the snapshot
+                            const userData = snapshot.val();
+
+                            // Check if the user's data contains a name
+                            if (userData.name) {
+                                const userFirstName = userData.name; // Assuming the user's name is stored under "name"
+                                const firstInitial = userFirstName.charAt(0).toUpperCase();
+
+                                // Set the glowing circle's content to the first initial
+                                document.getElementById('name').value = userData.name;
+                                document.getElementById('email').value = userData.email;
+                                userInitial.textContent = firstInitial;
+                            }
+                        }
+                    });
+                } else {
+                    // User is not logged in, show "Sign In" and "Register" and hide "Logout"
+                    signInLink.style.display = "flex";
+                    profileCircle.style.display = "none";
+                    logoutLink.style.display = "none"; // Hide the "Logout" link
+
+                    // Clear the glowing circle content
+                    userInitial.textContent = '';
+                    window.location.href = "../login.html";
+                }
+            });
+        }
+
+        // Function to handle user logout
+        function handleLogout() {
+            // Use the signOut function from the Firebase Auth module to log the user out
+            signOut(auth)
+                .then(() => {
+                    // Log out was successful
+                    console.log("User logged out.");
+                    window.location.href = "../login.html";
+                })
+                .catch((error) => {
+                    // Handle any errors that may occur during logout
+                    console.error("Error logging out:", error);
+                });
+        }
+
+        // Attach the handleLogout function to the "Logout" link's click event
+        const logoutLink = document.querySelector(".logout");
+        if (logoutLink) {
+            logoutLink.addEventListener("click", (event) => {
+                event.preventDefault();
+                handleLogout();
+            });
+        }
+
+        const nameInput = document.getElementById('name');
+        const profileTag = document.getElementById('tag');
+        const emailInput = document.getElementById('email');
+        const facebookInput = document.getElementById('facebook');
+        const XInput = document.getElementById('X');
+        const instaInput = document.getElementById('instagram');
+
+        saveBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent the form from submitting by default
+
+            // Get the currently authenticated user
+            const user = auth.currentUser;
+
+            if (user) {
+                const name = nameInput.value;
+                const tag = profileTag.value;
+                const email = emailInput.value;
+                const facebook = facebookInput.value;
+                const X = XInput.value;
+                const insta = instaInput.value;
+
+                // Create an object with the data to update
+                const userData = {
+                    name: name,
+                    tag: tag,
+                    email: email,
+                    facebook: facebook,
+                    X: X,
+                    insta: insta,
+                    profileCreated: true,
+                };
+
+                // Update the user data
+                set(ref(database, 'users/' + user.uid), userData)
+                    .then(() => {
+                        // Data has been written to the database
+                        console.log('User data updated in the database.');
+                        alert('Profile successfully created!');
+                        window.location.href = "../portfolio.html";
+                    })
+                    .catch((error) => {
+                        console.error('Error writing user data:', error);
+                        alert('Error during registration.');
+                    });
+            } else {
+                console.error('User not found.');
+                alert('User not found.');
+            }
+        });
+
+        updateSignInLinks();
+    </script>
+</body>
+
+</html>
