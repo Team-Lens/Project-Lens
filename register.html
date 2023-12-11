@@ -17,11 +17,11 @@
 <body id="register-page">
     <header>
         <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
-        <ul class="navbar">
+        <!-- <ul class="navbar">
             <li><a href="index.html">Explore</a></li>
             <li><a href="social.html">Social</a></li>
             <li><a href="portfolio.html">Portfolio</a></li>
-        </ul>
+        </ul> -->
         <div class="main">
             <a href="login.html" class="user"><i class="ri-polaroid-2-line"></i>Sign In</a>
             <div class="bx bx-menu" id="menu-icon"></div>
@@ -35,6 +35,11 @@
                 <input type="text" id="name" required>
                 <i class="ri-user-line"></i>
                 <label for="name" class="input-label">Name</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="username" required>
+                <i class="ri-user-line"></i>
+                <label for="username" class="input-label">Username</label>
             </div>
             <div class="input-box">
                 <input type="text" id="email" required>
@@ -85,6 +90,7 @@
         const auth = getAuth();
 
         const nameInput = document.getElementById('name');
+        const userNameInput = document.getElementById('username');
         const emailInput = document.getElementById('email');
         const password1Input = document.getElementById('password1');
         const password2Input = document.getElementById('password2');
@@ -94,6 +100,7 @@
             e.preventDefault(); // Prevent the form from submitting by default
             // Get the values of the input fields
             const name = nameInput.value;
+            const userName = userNameInput.value;
             const email = emailInput.value;
             const password1 = password1Input.value;
             const password2 = password2Input.value;
@@ -103,6 +110,12 @@
             if (!name) {
                 nameInput.style.border = "2px solid #ff6961";
                 errorMessage.textContent = "Please enter a name";
+                errorMessage.style.display = "flex";
+                return;
+            }
+            if (!userName) {
+                userNameInput.style.border = "2px solid #ff6961";
+                errorMessage.textContent = "Please enter a username";
                 errorMessage.style.display = "flex";
                 return;
             }
@@ -153,6 +166,7 @@
                     if (user) {
                         const userData = {
                             name: name,
+                            username: username,
                             email: email,
                             password: password1,
                             profileCreated: false
