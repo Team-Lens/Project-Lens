@@ -42,9 +42,9 @@
                 <label for="name" class="input-label">Name</label>
             </div>
             <div class="input-box">
-                <input type="text" id="tag" required>
+                <input type="text" id="username" required>
                 <i class="ri-profile-line"></i>
-                <label for="tag" class="input-label">Profile Tag</label>
+                <label for="username" class="input-label">username</label>
             </div>
             <div class="input-box">
                 <input type="text" id="email" required value="">
@@ -127,6 +127,7 @@
 
                                 // Set the glowing circle's content to the first initial
                                 document.getElementById('name').value = userData.name;
+                                document.getElementById('username').value = userData.username;
                                 document.getElementById('email').value = userData.email;
                                 userInitial.textContent = firstInitial;
                             }
@@ -170,7 +171,7 @@
         }
 
         const nameInput = document.getElementById('name');
-        const profileTag = document.getElementById('tag');
+        const userName = document.getElementById('username');
         const emailInput = document.getElementById('email');
         const facebookInput = document.getElementById('facebook');
         const XInput = document.getElementById('X');
@@ -184,7 +185,7 @@
 
             if (user) {
                 const name = nameInput.value;
-                const tag = profileTag.value;
+                const username = userName.value;
                 const email = emailInput.value;
                 const facebook = facebookInput.value;
                 const X = XInput.value;
@@ -193,7 +194,7 @@
                 // Create an object with the data to update
                 const userData = {
                     name: name,
-                    tag: tag,
+                    username: username,
                     email: email,
                     facebook: facebook,
                     X: X,

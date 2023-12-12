@@ -37,6 +37,11 @@
                 <label for="name" class="input-label">Name</label>
             </div>
             <div class="input-box">
+                <input type="text" id="username" required>
+                <i class="ri-user-line"></i>
+                <label for="username" class="input-label">username</label>
+            </div>
+            <div class="input-box">
                 <input type="text" id="email" required>
                 <i class="ri-mail-line"></i>
                 <label for="email" class="input-label">Email</label>
@@ -85,6 +90,7 @@
         const auth = getAuth();
 
         const nameInput = document.getElementById('name');
+        const usernameInput = document.getElementById('username');
         const emailInput = document.getElementById('email');
         const password1Input = document.getElementById('password1');
         const password2Input = document.getElementById('password2');
@@ -94,6 +100,7 @@
             e.preventDefault(); // Prevent the form from submitting by default
             // Get the values of the input fields
             const name = nameInput.value;
+            const username = usernameInput.value;
             const email = emailInput.value;
             const password1 = password1Input.value;
             const password2 = password2Input.value;
@@ -103,6 +110,13 @@
             if (!name) {
                 nameInput.style.border = "2px solid #ff6961";
                 errorMessage.textContent = "Please enter a name";
+                errorMessage.style.display = "flex";
+                return;
+            }
+
+            if (!username) {
+                nameInput.style.border = "2px solid #ff6961";
+                errorMessage.textContent = "Please enter a username";
                 errorMessage.style.display = "flex";
                 return;
             }
@@ -153,6 +167,7 @@
                     if (user) {
                         const userData = {
                             name: name,
+                            username: username,
                             email: email,
                             password: password1,
                             profileCreated: false
