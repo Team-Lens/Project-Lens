@@ -154,7 +154,6 @@
                                 X.href = userData.X;
                                 insta.href = userData.insta;
                                 // Set the glowing circle's content to the first initial
-                                console.log("here");
                                 userInitial.textContent = firstInitial;
                             }
                         }
@@ -183,24 +182,37 @@
         });
 
         function uploadFile(file) {
-            console.log(file.name);
-            const storageReference = storageRef(storage, 'images/' + file.name);
+            const userId = auth.currentUser.uid; // Assuming you have the user's UID
+            const userRef = ref(database, 'users/' + userId);
 
-            uploadBytesResumable(storageReference, file)
-                .then((snapshot) => {
-                    console.log('File uploaded successfully!');
-                    return getDownloadURL(snapshot.ref);
-                })
-                .then((downloadURL) => {
-                    console.log('Download URL:', downloadURL);
-                    // Use the download URL as needed
-                })
-                .catch((error) => {
-                    console.error('Error uploading file:', error);
-                });
+            get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    const username = userData.username;
+
+                    const storageReference = storageRef(storage, 'images/' + username + 2);
+
+                    uploadBytesResumable(storageReference, file)
+                        .then((snapshot) => {
+                            console.log('File uploaded successfully!');
+                            return getDownloadURL(snapshot.ref);
+                        })
+                        .then((downloadURL) => {
+                            console.log('Download URL:', downloadURL);
+                            // Use the download URL as needed
+                        })
+                        .catch((error) => {
+                            console.error('Error uploading file:', error);
+                        });
+
+                    // Proceed with uploading the file using the fetched username...
+                } else {
+                    console.log("User data not found.");
+                }
+            }).catch((error) => {
+                console.error("Error fetching user data:", error);
+            });
         }
-
-
 
         // Function to handle user logout
         function handleLogout() {
