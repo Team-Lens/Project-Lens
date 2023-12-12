@@ -13,9 +13,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-storage.js"></script>
-    <!-- <script src="your-firebase-config.js"></script> -->
 </head>
 
 <body>
@@ -37,58 +34,16 @@
     <div id="loader" class="center"></div>
     <section class="home">
         <div class="home-sci">
-            <a id = "facebook" href=""><i class="ri-facebook-box-line"></i></a>
-            <a id = "X" href=""><i class="ri-twitter-x-line"></i></a>
-            <a id = "insta" href=""><i class="ri-instagram-line"></i></a>
+            <a id="facebook" href=""><i class="ri-facebook-box-line"></i></a>
+            <a id="X" href=""><i class="ri-twitter-x-line"></i></a>
+            <a id="insta" href=""><i class="ri-instagram-line"></i></a>
         </div>
         <div class="home-content">
             <h1 id="name"></h1>
-            <h3 id = "username"></h3>
+            <h3 id="username"></h3>
             <p></p>
-            <input type="file" id="fileInput" />
-            <button onclick="uploadFile()">Upload Photo</button>
-
-
-
-            <img id="uploadedImage" style="max-width: 300px; max-height: 300px;" />
-
-            <script>
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-
-            // Get a reference to the storage service
-            var storage = firebase.storage();
-
-            // Function to handle file upload
-            function uploadFile() {
-                var fileInput = document.getElementById('fileInput');
-                var file = fileInput.files[0];
-
-                if (file) {
-                // Create a storage reference
-                var storageRef = storage.ref();
-
-                // Create a reference to the file
-                var photoRef = storageRef.child('photos/' + file.name);
-
-                // Upload the file
-                photoRef.put(file).then(function(snapshot) {
-                    console.log('File uploaded successfully!');
-                    
-                    // Get the download URL for the uploaded file
-                    photoRef.getDownloadURL().then(function(downloadURL) {
-                    // Display the uploaded image
-                    var uploadedImage = document.getElementById('uploadedImage');
-                    uploadedImage.src = downloadURL;
-                    });
-                }).catch(function(error) {
-                    console.error('Error uploading file:', error);
-                });
-                } else {
-                console.error('No file selected!');
-                }
-            }
-            </script>
+            <input type="file" id="fileInput" accept="image/*">
+            <button id="uploadBtn">Upload</button>
         </div>
         <div class="home-img">
             <div class="glowing-circle">
@@ -139,6 +94,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+        import { getStorage, uploadBytesResumable, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js";
+        import { ref as storageRef } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAqEinFNEbT60fxg_ig9AuadPQJjt48UXo",
@@ -153,6 +110,7 @@
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        const storage = getStorage(app);
         const auth = getAuth();
 
         function updateSignInLinks() {
@@ -185,7 +143,7 @@
                             if (userData.name) {
                                 const userFirstName = userData.name; // Assuming the user's name is stored under "name"
                                 const firstInitial = userFirstName.charAt(0).toUpperCase();
-                                
+
 
                                 console.log(user);
                                 name.textContent = userData.name;
@@ -210,6 +168,85 @@
                 }
             });
         }
+
+        const fileInput = document.getElementById('fileInput');
+        const uploadButton = document.getElementById('uploadBtn');
+
+        fileInput.addEventListener('change', (e) => {
+            const selectedFile = e.target.files[0];
+            if (selectedFile) {
+                uploadButton.addEventListener('click', () => uploadFile(selectedFile));
+            } else {
+                console.error('No file selected!');
+            }
+        });
+
+        function uploadFile(file) {
+            console.log(file.name);
+            countUserImages();
+            const storageReference = storageRef(storage, 'images/' + file.name);
+
+            uploadBytesResumable(storageReference, file)
+                .then((snapshot) => {
+                    console.log('File uploaded successfully!');
+                    return getDownloadURL(snapshot.ref);
+                })
+                .then((downloadURL) => {
+                    console.log('Download URL:', downloadURL);
+                    // Use the download URL as needed
+                })
+                .catch((error) => {
+                    console.error('Error uploading file:', error);
+                });
+        }
+
+        // Function to count images with the user's username
+        async function countUserImages() {
+
+            // Get the current user's username (assuming it's stored in userData)
+            const user = auth.currentUser;
+            if (!user) {
+                // Handle the case when the user is not logged in
+                return 0;
+            }
+
+            // Retrieve the username of the current user from your database
+            // Replace 'getUserData' with your function to get the user's data
+            const userData = await getUserData(user.uid); // Replace this with your actual function
+
+            if (!userData || !userData.username) {
+                // Handle the case when the user data or username is not available
+                return 0;
+            }
+
+            const username = userData.username;
+            console.log(username);
+            try {
+                // Reference to the user's images in storage (replace 'images/' with your storage path)
+                const imagesRef = ref(storage, 'images/');
+                const imagesList = await listAll(imagesRef);
+
+                let count = 0;
+                // Loop through all items in the folder
+                for (const item of imagesList.items) {
+                    // Check if the image filename contains the user's username
+                    if (item.name.includes(username)) {
+                        count++;
+                    }
+                }
+
+                return count;
+            } catch (error) {
+                console.error('Error counting images:', error);
+                return 0;
+            }
+        }
+
+        // Usage:
+        countUserImages().then((imageCount) => {
+            console.log('Number of images for the current user:', imageCount);
+        });
+
         // Function to handle user logout
         function handleLogout() {
             // Use the signOut function from the Firebase Auth module to log the user out
@@ -225,7 +262,6 @@
                 });
         }
 
-
         // Attach the handleLogout function to the "Logout" link's click event
         const logoutLink = document.querySelector(".logout");
         if (logoutLink) {
@@ -239,7 +275,6 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is logged in
-                console.log("here");
                 // Check if the user has created a profile
                 const database = getDatabase();
                 const profileRef = ref(database, `users/${user.uid}/profileCreated`);
@@ -258,6 +293,7 @@
                     });
             } else {
                 // User is not logged in, handle as needed
+                window.location.href = "./login.html";
             }
         });
 
