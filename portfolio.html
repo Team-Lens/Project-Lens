@@ -42,8 +42,10 @@
             <h1 id="name"></h1>
             <h3 id="username"></h3>
             <p></p>
-            <input type="file" id="fileInput" accept="image/*">
-            <button id="uploadBtn">Upload</button>
+            <label for="fileInput" class="custom-file-input">
+                Upload
+                <input type="file" id="fileInput" accept="image/*">
+            </label>
         </div>
         <div class="home-img">
             <div class="glowing-circle">
@@ -170,12 +172,11 @@
         }
 
         const fileInput = document.getElementById('fileInput');
-        const uploadButton = document.getElementById('uploadBtn');
 
         fileInput.addEventListener('change', (e) => {
             const selectedFile = e.target.files[0];
             if (selectedFile) {
-                uploadButton.addEventListener('click', () => uploadFile(selectedFile));
+                uploadFile(selectedFile);
             } else {
                 console.error('No file selected!');
             }
@@ -183,7 +184,6 @@
 
         function uploadFile(file) {
             console.log(file.name);
-            countUserImages();
             const storageReference = storageRef(storage, 'images/' + file.name);
 
             uploadBytesResumable(storageReference, file)
@@ -200,52 +200,7 @@
                 });
         }
 
-        // Function to count images with the user's username
-        async function countUserImages() {
 
-            // Get the current user's username (assuming it's stored in userData)
-            const user = auth.currentUser;
-            if (!user) {
-                // Handle the case when the user is not logged in
-                return 0;
-            }
-
-            // Retrieve the username of the current user from your database
-            // Replace 'getUserData' with your function to get the user's data
-            const userData = await getUserData(user.uid); // Replace this with your actual function
-
-            if (!userData || !userData.username) {
-                // Handle the case when the user data or username is not available
-                return 0;
-            }
-
-            const username = userData.username;
-            console.log(username);
-            try {
-                // Reference to the user's images in storage (replace 'images/' with your storage path)
-                const imagesRef = ref(storage, 'images/');
-                const imagesList = await listAll(imagesRef);
-
-                let count = 0;
-                // Loop through all items in the folder
-                for (const item of imagesList.items) {
-                    // Check if the image filename contains the user's username
-                    if (item.name.includes(username)) {
-                        count++;
-                    }
-                }
-
-                return count;
-            } catch (error) {
-                console.error('Error counting images:', error);
-                return 0;
-            }
-        }
-
-        // Usage:
-        countUserImages().then((imageCount) => {
-            console.log('Number of images for the current user:', imageCount);
-        });
 
         // Function to handle user logout
         function handleLogout() {
