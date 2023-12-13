@@ -230,6 +230,20 @@
                 });
         }
 
+        // Function to handle user logout
+        function handleLogout() {
+            // Use the signOut function from the Firebase Auth module to log the user out
+            signOut(auth)
+                .then(() => {
+                    // Log out was successful
+                    console.log("User logged out.");
+                    window.location.href = "login.html";
+                })
+                .catch((error) => {
+                    // Handle any errors that may occur during logout
+                    console.error("Error logging out:", error);
+                });
+        }
 
         // Attach the handleLogout function to the "Logout" link's click event
         const logoutLink = document.querySelector(".logout");
