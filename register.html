@@ -143,7 +143,7 @@
                 errorMessage.textContent = "Password length must be at least 6";
                 errorMessage.style.display = "flex";
                 return;
-            }
+            }            
 
             createUserWithEmailAndPassword(auth, email, password1)
                 .then((userCredential) => {
@@ -182,10 +182,14 @@
                     const errorCode = error.code;
                     const errorDetails = error.message;
 
+                    if (errorCode == "auth/email-already-in-use"){
+                        alert("Email already in use")
+                    }
                     console.log('Error code:', errorCode); // Log the error code
                     console.log('Error details:', errorDetails); // Log the error details
                 });
         })
+
     </script>
 </body>
 
