@@ -20,10 +20,11 @@
     font-size: 16px;
     margin: 10px 0 40px;
 }
-.btn{
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+#fileInput {
+    display: none; /* Hide the default file input */
+}
+
+.custom-file-input {
     width: 180px;
     height: 48px;
     background: var(--main-color);
@@ -32,7 +33,12 @@
     color: #fff;
     letter-spacing: 1px;
     user-select: none;
+    cursor: pointer; /* Add cursor pointer for interaction */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .home-sci a{
     display: flex;
     justify-content: center;

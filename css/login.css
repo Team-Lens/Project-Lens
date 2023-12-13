@@ -114,4 +114,10 @@ body{
     justify-content: center;
     color: #ff6961;
     font-size: 16px;
-}   
+}  
+.success-message {
+    display: none;
+    justify-content: center;
+    color: #54AD56;
+    font-size: 16px;
+}  
