@@ -182,52 +182,54 @@
         });
 
         function uploadFile(file) {
-            const userId = auth.currentUser.uid; // Assuming you have the user's UID
+            const userId = auth.currentUser.uid;
             const userRef = ref(database, 'users/' + userId);
 
-            get(userRef).then((snapshot) => {
-                if (snapshot.exists()) {
-                    const userData = snapshot.val();
-                    const username = userData.username;
+            get(userRef)
+                .then(async (snapshot) => {
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        const imagesRef = storageRef(storage, 'images/');
+                        const username = userData.username;
 
-                    const storageReference = storageRef(storage, 'images/' + username + 2);
+                        try {
+                            const imagesList = await listAll(imagesRef);
+                            console.log(imagesList);
+                            let count = 0;
 
-                    uploadBytesResumable(storageReference, file)
-                        .then((snapshot) => {
-                            console.log('File uploaded successfully!');
-                            return getDownloadURL(snapshot.ref);
-                        })
-                        .then((downloadURL) => {
-                            console.log('Download URL:', downloadURL);
-                            // Use the download URL as needed
-                        })
-                        .catch((error) => {
-                            console.error('Error uploading file:', error);
-                        });
+                            for (const item of imagesList.items) {
+                                // Check if the image filename contains the user's username
+                                if (item.name.includes(username)) {
+                                    count++;
+                                }
+                            }
 
-                    // Proceed with uploading the file using the fetched username...
-                } else {
-                    console.log("User data not found.");
-                }
-            }).catch((error) => {
-                console.error("Error fetching user data:", error);
-            });
-        }
+                            const storageReference = storageRef(storage, `images/${username}${count}`);
 
-        // Function to handle user logout
-        function handleLogout() {
-            // Use the signOut function from the Firebase Auth module to log the user out
-            signOut(auth)
-                .then(() => {
-                    // Log out was successful
-                    console.log("User logged out.");
-                    window.location.href = "login.html";
+                            uploadBytesResumable(storageReference, file)
+                                .then((snapshot) => {
+                                    console.log('File uploaded successfully!');
+                                    return getDownloadURL(snapshot.ref);
+                                })
+                                .then((downloadURL) => {
+                                    console.log('Download URL:', downloadURL);
+                                    // Use the download URL as needed
+                                })
+                                .catch((error) => {
+                                    console.error('Error uploading file:', error);
+                                });
+                        } catch (error) {
+                            console.error('Error listing images:', error);
+                        }
+                    } else {
+                        console.log('User data not found.');
+                    }
                 })
                 .catch((error) => {
-                    // Handle any errors that may occur during logout
-                    console.error("Error logging out:", error);
+                    console.error('Error fetching user data:', error);
                 });
         }
+
 
         // Attach the handleLogout function to the "Logout" link's click event
         const logoutLink = document.querySelector(".logout");
