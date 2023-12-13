@@ -19,7 +19,6 @@
     <header>
         <a href="index.html" class="logo"><i class="ri-landscape-fill"></i><span>Lens</span></a>
         <ul class="navbar">
-            <li><a href="index.html">Explore</a></li>
             <li><a href="social.html">Social</a></li>
             <li><a class="active" href="portfolio.html">Portfolio</a></li>
         </ul>
@@ -35,20 +34,23 @@
     <div id="loader" class="center"></div>
     <section class="home">
         <div class="home-sci">
-            <a href="https://www.facebook.com/ernest.khalimov.3/"><i class="ri-facebook-box-line"></i></a>
-            <a href="https://twitter.com/ernestkhalimov_?lang=en"><i class="ri-twitter-x-line"></i></a>
-            <a href="https://www.instagram.com/berlin.1969/?hl=en"><i class="ri-instagram-line"></i></a>
+            <a id="facebook" href=""><i class="ri-facebook-box-line"></i></a>
+            <a id="X" href=""><i class="ri-twitter-x-line"></i></a>
+            <a id="insta" href=""><i class="ri-instagram-line"></i></a>
         </div>
         <div class="home-content">
-            <h1>Ernest Khalimov</h1>
-            <h3>Dumbell Enjoyer</h3>
+            <h1 id="name"></h1>
+            <h3 id="username"></h3>
             <p></p>
-            <a href="#" class="btn">Contact Me</a>
+            <label for="fileInput" class="custom-file-input">
+                Upload
+                <input type="file" id="fileInput" accept="image/*">
+            </label>
         </div>
         <div class="home-img">
             <div class="glowing-circle">
                 <div class="image">
-                    <img src="./pictures/GCN.jpg" alt="Gigachad">
+                    <img src="" alt="">
                 </div>
             </div>
         </div>
@@ -63,7 +65,7 @@
     <div class="portfolio-main">
         <div class="container">
             <div class="gallery">
-                <a href="pictures/1.jpeg" data-lightbox="models" data-title="Caption">
+                <!-- <a href="pictures/1.jpeg" data-lightbox="models" data-title="Caption">
                     <img src="pictures/1.jpeg" alt="img">
                 </a>
                 <a href="pictures/2.JPG" data-lightbox="models" data-title="Caption2">
@@ -77,7 +79,7 @@
                 </a>
                 <a href="pictures/5.jpg" data-lightbox="models" data-title="Caption5">
                     <img src="pictures/5.jpg" alt="img">
-                </a>
+                </a> -->
             </div>
         </div>
     </div>
@@ -94,6 +96,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+        import { getStorage, uploadBytesResumable, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js";
+        import { ref as storageRef } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAqEinFNEbT60fxg_ig9AuadPQJjt48UXo",
@@ -108,6 +112,7 @@
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        const storage = getStorage(app);
         const auth = getAuth();
 
         function updateSignInLinks() {
@@ -115,6 +120,12 @@
             const logoutLink = document.querySelector(".logout");
             const profileCircle = document.querySelector(".profile-circle");
             const userInitial = document.getElementById("user-initial");
+            const name = document.getElementById("name");
+            const username = document.getElementById("username")
+            const email = document.getElementById("email");
+            const facebook = document.getElementById("facebook");
+            const X = document.getElementById("X");
+            const insta = document.getElementById("insta");
             // Check the user's login status
             onAuthStateChanged(auth, (user) => {
                 if (user) {
@@ -135,6 +146,13 @@
                                 const userFirstName = userData.name; // Assuming the user's name is stored under "name"
                                 const firstInitial = userFirstName.charAt(0).toUpperCase();
 
+
+                                console.log(user);
+                                name.textContent = userData.name;
+                                username.textContent = userData.username;
+                                facebook.href = userData.facebook;
+                                X.href = userData.X;
+                                insta.href = userData.insta;
                                 // Set the glowing circle's content to the first initial
                                 userInitial.textContent = firstInitial;
                             }
@@ -151,6 +169,67 @@
                 }
             });
         }
+
+        const fileInput = document.getElementById('fileInput');
+
+        fileInput.addEventListener('change', (e) => {
+            const selectedFile = e.target.files[0];
+            if (selectedFile) {
+                uploadFile(selectedFile);
+            } else {
+                console.error('No file selected!');
+            }
+        });
+
+        function uploadFile(file) {
+            const userId = auth.currentUser.uid;
+            const userRef = ref(database, 'users/' + userId);
+
+            get(userRef)
+                .then(async (snapshot) => {
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        const imagesRef = storageRef(storage, 'images/');
+                        const username = userData.username;
+
+                        try {
+                            const imagesList = await listAll(imagesRef);
+                            console.log(imagesList);
+                            let count = 0;
+
+                            for (const item of imagesList.items) {
+                                // Check if the image filename contains the user's username
+                                if (item.name.includes(username)) {
+                                    count++;
+                                }
+                            }
+
+                            const storageReference = storageRef(storage, `images/${username}${count}`);
+
+                            uploadBytesResumable(storageReference, file)
+                                .then((snapshot) => {
+                                    console.log('File uploaded successfully!');
+                                    return getDownloadURL(snapshot.ref);
+                                })
+                                .then((downloadURL) => {
+                                    console.log('Download URL:', downloadURL);
+                                    // Use the download URL as needed
+                                })
+                                .catch((error) => {
+                                    console.error('Error uploading file:', error);
+                                });
+                        } catch (error) {
+                            console.error('Error listing images:', error);
+                        }
+                    } else {
+                        console.log('User data not found.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching user data:', error);
+                });
+        }
+
         // Function to handle user logout
         function handleLogout() {
             // Use the signOut function from the Firebase Auth module to log the user out
@@ -166,7 +245,6 @@
                 });
         }
 
-
         // Attach the handleLogout function to the "Logout" link's click event
         const logoutLink = document.querySelector(".logout");
         if (logoutLink) {
@@ -180,7 +258,6 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is logged in
-
                 // Check if the user has created a profile
                 const database = getDatabase();
                 const profileRef = ref(database, `users/${user.uid}/profileCreated`);
@@ -199,6 +276,7 @@
                     });
             } else {
                 // User is not logged in, handle as needed
+                window.location.href = "./login.html";
             }
         });
 
