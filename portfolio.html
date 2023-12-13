@@ -65,9 +65,9 @@
     <div class="portfolio-main">
         <div class="container">
             <div class="gallery">
-                <!-- <a href="pictures/1.jpeg" data-lightbox="models" data-title="Caption">
-                    <img src="pictures/1.jpeg" alt="img">
-                </a>
+                <a id = "demo" href="" data-lightbox="models" data-title="Caption">
+                    <img  id ="img" src="" alt="img">
+                <!-- </a>
                 <a href="pictures/2.JPG" data-lightbox="models" data-title="Caption2">
                     <img src="pictures/2.JPG" alt="img">
                 </a>
@@ -79,7 +79,7 @@
                 </a>
                 <a href="pictures/5.jpg" data-lightbox="models" data-title="Caption5">
                     <img src="pictures/5.jpg" alt="img">
-                </a> -->
+                </a> --> 
             </div>
         </div>
     </div>
@@ -155,6 +155,7 @@
                                 insta.href = userData.insta;
                                 // Set the glowing circle's content to the first initial
                                 userInitial.textContent = firstInitial;
+                                downloadFile();
                             }
                         }
                     });
@@ -229,7 +230,62 @@
                     console.error('Error fetching user data:', error);
                 });
         }
+        
+        function downloadFile(){
+            const userId = auth.currentUser.uid;
+            const userRef = ref(database, 'users/' + userId);
+            get(userRef)
+                .then(async (snapshot) => {
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        const imagesRef = storageRef(storage, 'images/');
+                        const username = userData.username;
 
+                        const imagesList = await listAll(imagesRef);
+                        console.log(imagesList);
+                        let count = 0;
+
+                        for (const item of imagesList.items) {
+                            // Check if the image filename contains the user's username
+                        
+                            if (item.name.includes(username)) {
+                                count++;
+                               
+                            }
+                        }
+                        const storageReference = storageRef(storage, `images/${username}0`);
+                        
+                        getDownloadURL(storageReference).then((url) => {
+                            
+                            const res = document.getElementById("demo");
+                            const img = document.getElementById("img");
+                            res.href = url;
+                            img.src = url;
+                        })
+                        .catch((error) => {
+                        // A full list of error codes is available at
+                        // https://firebase.google.com/docs/storage/web/handle-errors
+                        switch (error.code) {
+                        case 'storage/object-not-found':
+                            // File doesn't exist
+                            break;
+                        case 'storage/unauthorized':
+                            // User doesn't have permission to access the object
+                            break;
+                        case 'storage/canceled':
+                            // User canceled the upload
+                            break;
+
+                        // ...
+
+                        case 'storage/unknown':
+                            // Unknown error occurred, inspect the server response
+                            break;
+                        }
+                    });
+                }
+            });
+        }
 
         // Attach the handleLogout function to the "Logout" link's click event
         const logoutLink = document.querySelector(".logout");
