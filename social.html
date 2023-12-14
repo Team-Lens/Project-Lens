@@ -43,6 +43,8 @@
         <a class="light-mode-btn" id="lightMode"><i class="ri-sun-line"></i></a>
         <a class="dark-mode-btn" id="darkMode"><i class="ri-moon-line"></i></a>
     </footer>
+    
+    
     <!--js link-->
     <script src="./javascript/default.js"></script>
     <script type="module">
@@ -99,21 +101,25 @@
                 const userCard = document.createElement('div');
                 userCard.className = 'user-card';
 
-                // // Profile image
-                // const profileImage = document.createElement('img');
-                // profileImage.src = userData.profileImage || 'default.jpg';
-                // profileImage.alt = 'Profile Image';
-
                 // User details
                 const userDetails = document.createElement('div');
                 userDetails.className = 'user-details';
-                userDetails.innerHTML = `
-                    <h3>${userData.name}</h3>
-                    <p>Email: ${userData.email}</p>
-                `;
 
-                // Append elements to user card
-                // userCard.appendChild(profileImage);
+                // Make the username clickable
+                const usernameElement = document.createElement('h3');
+                usernameElement.textContent = userData.name;
+                usernameElement.addEventListener('click', () => {
+                    console.log(`Clicked on ${userData.name}'s profile!`);
+                });
+
+                const emailElement = document.createElement('p');
+                emailElement.textContent = `Email: ${userData.email}`;
+
+                // Append elements to user details
+                userDetails.appendChild(usernameElement);
+                userDetails.appendChild(emailElement);
+
+                // Append user details to user card
                 userCard.appendChild(userDetails);
 
                 // Append user card to user feed section
