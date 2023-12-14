@@ -246,20 +246,20 @@
                         const imagesRef = storageRef(storage, 'profiles/');
                         const username = userData.username;
 
-        // Function to handle user logout
-        function handleLogout() {
-            // Use the signOut function from the Firebase Auth module to log the user out
-            signOut(auth)
-                .then(() => {
-                    // Log out was successful
-                    console.log("User logged out.");
-                    window.location.href = "login.html";
-                })
-                .catch((error) => {
-                    // Handle any errors that may occur during logout
-                    console.error("Error logging out:", error);
-                });
-        }
+                        // Function to handle user logout
+                        function handleLogout() {
+                            // Use the signOut function from the Firebase Auth module to log the user out
+                            signOut(auth)
+                                .then(() => {
+                                    // Log out was successful
+                                    console.log("User logged out.");
+                                    window.location.href = "login.html";
+                                })
+                                .catch((error) => {
+                                    // Handle any errors that may occur during logout
+                                    console.error("Error logging out:", error);
+                                });
+                        }
 
                         try {
 
@@ -317,7 +317,9 @@
                                 anchor.href = url;
                                 img.src = url;
                                 img.alt = `Image ${count}`;
-
+                                anchor.setAttribute('data-lightbox', 'gallery');
+                                anchor.setAttribute('href', url);
+                                anchor.setAttribute('data-title', `Image ${count}`);
                                 // Append the image to the "demo" element
                                 const res = document.getElementById("gallery");
                                 res.appendChild(anchor);
