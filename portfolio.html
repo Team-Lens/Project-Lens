@@ -245,7 +245,7 @@
                         const userData = snapshot.val();
                         const imagesRef = storageRef(storage, 'profiles/');
                         const username = userData.username;
-
+                      
                         try {
 
                             const storageReference = storageRef(storage, `profiles/${username}0`);
@@ -302,7 +302,9 @@
                                 anchor.href = url;
                                 img.src = url;
                                 img.alt = `Image ${count}`;
-
+                                anchor.setAttribute('data-lightbox', 'gallery');
+                                anchor.setAttribute('href', url);
+                                anchor.setAttribute('data-title', `Image ${count}`);
                                 // Append the image to the "demo" element
                                 const res = document.getElementById("gallery");
                                 res.appendChild(anchor);
