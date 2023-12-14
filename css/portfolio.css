@@ -23,8 +23,27 @@
 #fileInput {
     display: none; /* Hide the default file input */
 }
-
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Adjust the spacing between elements */
+    width: 380px; /* Set the width according to your layout */
+    /* Other styles as needed */
+}
 .custom-file-input {
+    width: 180px;
+    height: 48px;
+    background: var(--main-color);
+    border-radius: 40px;
+    font-size: 19px;
+    color: #fff;
+    letter-spacing: 1px;
+    user-select: none;
+    cursor: pointer; /* Add cursor pointer for interaction */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.edit-profile{
     width: 180px;
     height: 48px;
     background: var(--main-color);
@@ -55,9 +74,8 @@
     padding-left: 50%;
     justify-content: center;
     align-items: center;
-    z-index: 60:
+    z-index: 60;
 }
-
 .home-sci a{
     display: flex;
     justify-content: center;
