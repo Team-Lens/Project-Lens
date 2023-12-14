@@ -36,6 +36,10 @@
 
     <section id="userFeed" class = "userfeed">
         
+        <!-- Add these elements inside the body of your HTML -->
+<input type="text" id="searchInput" placeholder="Search by name...">
+<div id="filteredUserList"></div>
+
     </section>
 
 
@@ -86,6 +90,7 @@
                 });
         }
 
+        /**
         async function displayUsersInFeed() {
             const userFeedSection = document.getElementById('userFeed');
 
@@ -126,7 +131,7 @@
                 userFeedSection.appendChild(userCard);
             });
         }
-
+*/
 
         function updateSignInLinks() {
             const signInLink = document.querySelector(".user");
