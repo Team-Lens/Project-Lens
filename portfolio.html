@@ -49,7 +49,7 @@
         </div>
         <div class="home-img">
             <div class="glowing-circle">
-                <label for="pfpInput" class="custom-file-input" id = "pfpInput" >
+                <label for="pfpInput" class="custom-file-input" id="pfpInput">
                     Upload
                     <input type="file" id="pfpInput" accept="image/*">
                 </label>
@@ -69,8 +69,8 @@
     <div class="portfolio-main">
         <div class="container">
             <div class="gallery" id="gallery">
-                <a id = "demo" href="" data-lightbox="models" data-title="Caption">
-                    <img  id ="img" src="">
+                <!-- <a id="demo" href="" data-lightbox="models" data-title="Caption">
+                    <img id="img" src=""> -->
             </div>
         </div>
     </div>
@@ -170,8 +170,8 @@
             if (selectedFile) {
                 uploadFile(selectedFile);
                 downloadFile();
-            
-                
+
+
             } else {
                 console.error('No file selected!');
             }
@@ -245,19 +245,19 @@
                         const userData = snapshot.val();
                         const imagesRef = storageRef(storage, 'profiles/');
                         const username = userData.username;
-                        
+
 
                         try {
-                            
+
                             const storageReference = storageRef(storage, `profiles/${username}0`);
 
                             uploadBytesResumable(storageReference, file)
                                 .then((snapshot) => {
                                     console.log('File uploaded successfully!');
-                                    
-                                    
+
+
                                     location.reload();
-                                    
+
                                     return getDownloadURL(snapshot.ref);
                                 })
                                 .then((downloadURL) => {
@@ -278,67 +278,110 @@
                     console.error('Error fetching user data:', error);
                 });
         }
-        function downloadFile(){
+        function downloadFile() {
             const userId = auth.currentUser.uid;
             const userRef = ref(database, 'users/' + userId);
-            get(userRef)
-                .then(async (snapshot) => {
-                    if (snapshot.exists()) {
-                        const userData = snapshot.val();
-                        const imagesRef = storageRef(storage, 'images/');
-                        const username = userData.username;
-                        let count = 0;
-                        const storageReference = storageRef(storage, `images/${username}${count}`);
-                        const imagesList = await listAll(imagesRef);
-                        
-                        for (const item of imagesList.items) {
-                                // Check if the image filename contains the user's username
-                                if (item.name.includes(username)) {
-                                    count++;
-                                }
-                            }
-                        
-                        getDownloadURL(storageReference).then((url) => {
-                            const res = document.getElementById("demo");
-                            const img = document.getElementById("img");
-                            res.href=url;
-                            img.src=url;
-                            console.log(img.src);
-                            // for(i=0;i<=count;i++){
-                            // console.log("here");
-                            // const node = document.getElementById("demo").lastChild;
-                            // const clone = node.cloneNode(true);
-                            // document.getElementById("demo").appendChild(clone);
-                            //     console.log("cloned");
-    
-                            // }
-                            
-                        })
-                        .catch((error) => {
-                        // A full list of error codes is available at
-                        // https://firebase.google.com/docs/storage/web/handle-errors
-                        switch (error.code) {
-                        case 'storage/object-not-found':
-                            // File doesn't exist
-                            break;
-                        case 'storage/unauthorized':
-                            // User doesn't have permission to access the object
-                            break;
-                        case 'storage/canceled':
-                            // User canceled the upload
-                            break;
 
-                        // ...
+            get(userRef).then(async (snapshot) => {
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    const imagesRef = storageRef(storage, 'images/');
+                    const username = userData.username;
+                    let count = 0;
 
-                        case 'storage/unknown':
-                            // Unknown error occurred, inspect the server response
-                            break;
+                    const imagesList = await listAll(imagesRef);
+
+                    for (const item of imagesList.items) {
+                        // Check if the image filename contains the user's username
+                        if (item.name.includes(username)) {
+                            count++;
+                            const storageReference = storageRef(storage, `images/${username}${count}`);
+                            getDownloadURL(storageReference).then((url) => {
+                                // Create new image element
+                                const anchor = document.createElement('a');
+                                const img = document.createElement("img");
+                                anchor.href = url;
+                                img.src = url;
+                                img.alt = `Image ${count}`;
+
+                                // Append the image to the "demo" element
+                                const res = document.getElementById("gallery");
+                                res.appendChild(anchor);
+                                anchor.appendChild(img);
+                            }).catch((error) => {
+                                // Handle image download error
+                                console.error('Error downloading image:', error);
+                            });
                         }
-                    });
+                    }
                 }
+            }).catch((error) => {
+                // Handle user data retrieval error
+                console.error('Error getting user data:', error);
             });
         }
-        function downloadPfp(){
+
+
+        // function downloadFile(){
+        //     const userId = auth.currentUser.uid;
+        //     const userRef = ref(database, 'users/' + userId);
+        //     get(userRef)
+        //         .then(async (snapshot) => {
+        //             if (snapshot.exists()) {
+        //                 const userData = snapshot.val();
+        //                 const imagesRef = storageRef(storage, 'images/');
+        //                 const username = userData.username;
+        //                 let count = 0;
+        //                 const storageReference = storageRef(storage, `images/${username}${count}`);
+        //                 const imagesList = await listAll(imagesRef);
+
+        //                 for (const item of imagesList.items) {
+        //                         // Check if the image filename contains the user's username
+        //                         if (item.name.includes(username)) {
+        //                             count++;
+        //                         }
+        //                     }
+        //                 getDownloadURL(storageReference).then((url) => {
+        //                     const res = document.getElementById("demo");
+        //                     const img = document.getElementById("img");
+        //                     res.href=url;
+        //                     img.src=url;
+        //                     console.log(img.src);
+        //                     // for(i=0;i<=count;i++){
+        //                     // console.log("here");
+        //                     // const node = document.getElementById("demo").lastChild;
+        //                     // const clone = node.cloneNode(true);
+        //                     // document.getElementById("demo").appendChild(clone);
+        //                     //     console.log("cloned");
+
+        //                     // }
+
+        //                 })
+        //                 .catch((error) => {
+        //                 // A full list of error codes is available at
+        //                 // https://firebase.google.com/docs/storage/web/handle-errors
+        //                 switch (error.code) {
+        //                 case 'storage/object-not-found':
+        //                     // File doesn't exist
+        //                     break;
+        //                 case 'storage/unauthorized':
+        //                     // User doesn't have permission to access the object
+        //                     break;
+        //                 case 'storage/canceled':
+        //                     // User canceled the upload
+        //                     break;
+
+        //                 // ...
+
+        //                 case 'storage/unknown':
+        //                     // Unknown error occurred, inspect the server response
+        //                     break;
+        //                 }
+        //             });
+        //         }
+        //     });
+        // }
+        function downloadPfp() {
             const userId = auth.currentUser.uid;
             const userRef = ref(database, 'users/' + userId);
             get(userRef)
@@ -347,39 +390,39 @@
                         const userData = snapshot.val();
                         const imagesRef = storageRef(storage, 'profiles/');
                         const username = userData.username;
-                       
+
                         const storageReference = storageRef(storage, `profiles/${username}0`);
                         console.log(storageReference);
                         getDownloadURL(storageReference).then((url) => {
                             const img = document.getElementById("pfp");
-                            img.src=url;  
+                            img.src = url;
                             const hide = document.getElementById("pfpInput");
                             hide.className = "afterUpload";
                             console.log('hide is hidden');
                         })
-                        .catch((error) => {
-                        // A full list of error codes is available at
-                        // https://firebase.google.com/docs/storage/web/handle-errors
-                        switch (error.code) {
-                        case 'storage/object-not-found':
-                            // File doesn't exist
-                            break;
-                        case 'storage/unauthorized':
-                            // User doesn't have permission to access the object
-                            break;
-                        case 'storage/canceled':
-                            // User canceled the upload
-                            break;
+                            .catch((error) => {
+                                // A full list of error codes is available at
+                                // https://firebase.google.com/docs/storage/web/handle-errors
+                                switch (error.code) {
+                                    case 'storage/object-not-found':
+                                        // File doesn't exist
+                                        break;
+                                    case 'storage/unauthorized':
+                                        // User doesn't have permission to access the object
+                                        break;
+                                    case 'storage/canceled':
+                                        // User canceled the upload
+                                        break;
 
-                        // ...
+                                    // ...
 
-                        case 'storage/unknown':
-                            // Unknown error occurred, inspect the server response
-                            break;
-                        }
-                    });
-                }
-            });
+                                    case 'storage/unknown':
+                                        // Unknown error occurred, inspect the server response
+                                        break;
+                                }
+                            });
+                    }
+                });
         }
 
         // Attach the handleLogout function to the "Logout" link's click event
@@ -416,8 +459,8 @@
                 window.location.href = "./login.html";
             }
         });
-         // Function to handle user logout
-         function handleLogout() {
+        // Function to handle user logout
+        function handleLogout() {
             // Use the signOut function from the Firebase Auth module to log the user out
             signOut(auth)
                 .then(() => {
