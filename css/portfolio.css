@@ -38,6 +38,20 @@
     justify-content: center;
     align-items: center;
 }
+.afterUpload{
+    width: 180px;
+    height: 48px;
+    background: var(--main-color);
+    border-radius: 40px;
+    font-size: 19px;
+    color: #fff;
+    letter-spacing: 1px;
+    user-select: none;
+    cursor: pointer; /* Add cursor pointer for interaction */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
 
 .home-sci a{
     display: flex;
