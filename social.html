@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Social Page</title>
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="./css/social.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -28,19 +29,29 @@
             <a href="#" class="logout">Logout</a>
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
+        <div id="loader" class="center"></div>
     </header>
-    <div id="loader" class="center"></div>
+
+
+
+    <section id="userFeed" class = "userfeed">
+        
+    </section>
+
+
     <footer>
         <a class="light-mode-btn" id="lightMode"><i class="ri-sun-line"></i></a>
         <a class="dark-mode-btn" id="darkMode"><i class="ri-moon-line"></i></a>
     </footer>
+    
+    
     <!--js link-->
     <script src="./javascript/default.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
-
+        
         const firebaseConfig = {
             apiKey: "AIzaSyAqEinFNEbT60fxg_ig9AuadPQJjt48UXo",
             authDomain: "project-lens-a4781.firebaseapp.com",
@@ -55,6 +66,66 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const auth = getAuth();
+
+        
+        async function fetchUserDataFromFirebase() {
+            const usersRef = ref(database, 'users');
+
+            return get(usersRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        return snapshot.val();
+                    } else {
+                        console.log('No users found.');
+                        return [];
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error getting users:', error);
+                    return [];
+                });
+        }
+
+        async function displayUsersInFeed() {
+            const userFeedSection = document.getElementById('userFeed');
+
+            // Clear previous content
+            userFeedSection.innerHTML = '';
+
+            // Fetch user data from Firebase
+            const userDataFromFirebase = await fetchUserDataFromFirebase();
+
+            // Loop through users and create HTML elements
+            Object.keys(userDataFromFirebase).forEach((userId) => {
+                const userData = userDataFromFirebase[userId];
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+
+                // User details
+                const userDetails = document.createElement('div');
+                userDetails.className = 'user-details';
+
+                // Make the username clickable
+                const usernameElement = document.createElement('h3');
+                usernameElement.textContent = userData.name;
+                usernameElement.addEventListener('click', () => {
+                    console.log(`Clicked on ${userData.name}'s profile!`);
+                });
+
+                const emailElement = document.createElement('p');
+                emailElement.textContent = `Email: ${userData.email}`;
+
+                // Append elements to user details
+                userDetails.appendChild(usernameElement);
+                userDetails.appendChild(emailElement);
+
+                // Append user details to user card
+                userCard.appendChild(userDetails);
+
+                // Append user card to user feed section
+                userFeedSection.appendChild(userCard);
+            });
+        }
 
 
         function updateSignInLinks() {
@@ -129,6 +200,7 @@
 
         // Call the function to update the links when the page loads
         updateSignInLinks();
+        displayUsersInFeed();
     </script>
 </body>
 
