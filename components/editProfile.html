@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Create Profile Page</title>
+    <title>Edit Profile Page</title>
     <link rel="stylesheet" type="text/css" href="../css/navbar.css">
     <link rel="stylesheet" type="text/css" href="../css/createProfile.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,7 +31,7 @@
     <div id="loader" class="center"></div>
     <div class="wrapper">
         <form>
-            <h1>Set Up Profile</h1>
+            <h1>Edit Profile</h1>
             <h2>Personal info</h2>
             <div class="input-box">
                 <input type="text" id="name" required value="">
@@ -64,7 +64,7 @@
                 <i class="ri-instagram-line"></i>
                 <label for="instagram" class="input-label">Instagram Link</label>
             </div>
-            <button type="submit" class="btn" id="saveBtn">Save</button>
+            <button type="submit" class="btn" id="saveBtn">Save Changes</button>
         </form>
     </div>
     <footer>
@@ -107,7 +107,6 @@
                     signInLink.style.display = "none";
                     profileCircle.style.display = "flex";
                     logoutLink.style.display = "flex"; // Display the "Logout" link
-                    alert("Let's create a profile");
 
                     // Fetch the user's name from the database
                     const userRef = ref(database, 'users/' + user.uid);
@@ -126,6 +125,9 @@
                                 document.getElementById('name').value = userData.name;
                                 document.getElementById('username').value = userData.username;
                                 document.getElementById('email').value = userData.email;
+                                document.getElementById('facebook').value = userData.facebook;
+                                document.getElementById('X').value = userData.X;
+                                document.getElementById('instagram').value = userData.insta;
                                 userInitial.textContent = firstInitial;
                             }
                         }
@@ -204,7 +206,7 @@
                     .then(() => {
                         // Data has been written to the database
                         console.log('User data updated in the database.');
-                        alert('Profile successfully created!');
+                        alert('Profile Saved');
                         window.location.href = "../portfolio.html";
                     })
                     .catch((error) => {
@@ -227,11 +229,11 @@
                 get(profileRef)
                     .then((snapshot) => {
                         if (snapshot.exists() && snapshot.val() === true) {
-                            //user already created profile, take them to edit profile
-                            window.location.href = "./editProfile.html";
-                        } else {
-                            // User has not created a profile, redirect to the createProfile page
+                            //user is logged in
                             console.log('logged in, validated');
+                        } else {
+                            //user has not created a profile, take them to edit profile
+                            window.location.href = "./createProfile.html";
                         }
                     })
                     .catch((error) => {
