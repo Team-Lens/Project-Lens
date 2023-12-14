@@ -49,7 +49,7 @@
         </div>
         <div class="home-img">
             <div class="glowing-circle">
-                <label for="pfpInput" class="custom-file-input" id="pfpInput">
+                <label for="pfpInput" class="pfpInput">
                     Upload
                     <input type="file" id="pfpInput" accept="image/*">
                 </label>
@@ -246,21 +246,6 @@
                         const imagesRef = storageRef(storage, 'profiles/');
                         const username = userData.username;
 
-        // Function to handle user logout
-        function handleLogout() {
-            // Use the signOut function from the Firebase Auth module to log the user out
-            signOut(auth)
-                .then(() => {
-                    // Log out was successful
-                    console.log("User logged out.");
-                    window.location.href = "login.html";
-                })
-                .catch((error) => {
-                    // Handle any errors that may occur during logout
-                    console.error("Error logging out:", error);
-                });
-        }
-
                         try {
 
                             const storageReference = storageRef(storage, `profiles/${username}0`);
@@ -410,8 +395,8 @@
                         getDownloadURL(storageReference).then((url) => {
                             const img = document.getElementById("pfp");
                             img.src = url;
-                            const hide = document.getElementById("pfpInput");
-                            hide.className = "afterUpload";
+                            const hide = document.querySelector(".pfpInput");
+                            hide.style.display = "none";
                             console.log('hide is hidden');
                         })
                             .catch((error) => {

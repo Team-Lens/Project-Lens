@@ -38,17 +38,21 @@
     justify-content: center;
     align-items: center;
 }
-.afterUpload{
+#pfpInput {
+    display: none; /* Hide the default file input */
+}
+.pfpInput{
     width: 180px;
     height: 48px;
     background: var(--main-color);
     border-radius: 40px;
-    font-size: 19px;
+    font-size: 30px;
     color: #fff;
     letter-spacing: 1px;
     user-select: none;
     cursor: pointer; /* Add cursor pointer for interaction */
-    display: none;
+    display: flex;
+    padding-left: 50%;
     justify-content: center;
     align-items: center;
 }
