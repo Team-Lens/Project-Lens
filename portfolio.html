@@ -13,6 +13,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <script src="exif-js-master/exif-js-master/exif.js"></script>
+    <script src="javascript/getCameraSpecs.js"></script>
+    <script src="javascript/server.js"></script>
 </head>
 
 <body>
@@ -248,7 +251,7 @@
                         const userData = snapshot.val();
                         const imagesRef = storageRef(storage, 'profiles/');
                         const username = userData.username;
-                      
+
                         try {
 
                             const storageReference = storageRef(storage, `profiles/${username}0`);
@@ -280,6 +283,21 @@
                     console.error('Error fetching user data:', error);
                 });
         }
+        function getCameraSpecsFromServer(imageUrl) {
+            fetch(`https://team-lens.github.io/Project-Lens/portfolio.html/getCameraSpecs?imageUrl=${imageUrl}`)
+                .then(response => response.json())
+                .then(cameraSpecs => {
+                    // Handle camera specs received from the server
+                    console.log("Camera Make:", cameraSpecs.make);
+                    console.log("Camera Model:", cameraSpecs.model);
+                    console.log("Focal Length:", cameraSpecs.focalLength);
+                    console.log("Exposure Time:", cameraSpecs.exposureTime);
+                    console.log("Aperture:", cameraSpecs.aperture);
+                    // Add more fields as needed
+                })
+                .catch(error => console.error('Error fetching camera specs:', error));
+        }
+
         function downloadFile() {
             const userId = auth.currentUser.uid;
             const userRef = ref(database, 'users/' + userId);
@@ -302,12 +320,13 @@
                                 // Create new image element
                                 const anchor = document.createElement('a');
                                 const img = document.createElement("img");
+
                                 anchor.href = url;
                                 img.src = url;
                                 img.alt = `Image ${count}`;
                                 anchor.setAttribute('data-lightbox', 'gallery');
                                 anchor.setAttribute('href', url);
-                                anchor.setAttribute('data-title', `Image ${count}`);
+                                anchor.setAttribute('data-title', `Camera Specs: ${getCameraSpecsFromServer(url)}`);
                                 // Append the image to the "demo" element
                                 const res = document.getElementById("gallery");
                                 res.appendChild(anchor);
@@ -326,65 +345,6 @@
         }
 
 
-        // function downloadFile(){
-        //     const userId = auth.currentUser.uid;
-        //     const userRef = ref(database, 'users/' + userId);
-        //     get(userRef)
-        //         .then(async (snapshot) => {
-        //             if (snapshot.exists()) {
-        //                 const userData = snapshot.val();
-        //                 const imagesRef = storageRef(storage, 'images/');
-        //                 const username = userData.username;
-        //                 let count = 0;
-        //                 const storageReference = storageRef(storage, `images/${username}${count}`);
-        //                 const imagesList = await listAll(imagesRef);
-
-        //                 for (const item of imagesList.items) {
-        //                         // Check if the image filename contains the user's username
-        //                         if (item.name.includes(username)) {
-        //                             count++;
-        //                         }
-        //                     }
-        //                 getDownloadURL(storageReference).then((url) => {
-        //                     const res = document.getElementById("demo");
-        //                     const img = document.getElementById("img");
-        //                     res.href=url;
-        //                     img.src=url;
-        //                     console.log(img.src);
-        //                     // for(i=0;i<=count;i++){
-        //                     // console.log("here");
-        //                     // const node = document.getElementById("demo").lastChild;
-        //                     // const clone = node.cloneNode(true);
-        //                     // document.getElementById("demo").appendChild(clone);
-        //                     //     console.log("cloned");
-
-        //                     // }
-
-        //                 })
-        //                 .catch((error) => {
-        //                 // A full list of error codes is available at
-        //                 // https://firebase.google.com/docs/storage/web/handle-errors
-        //                 switch (error.code) {
-        //                 case 'storage/object-not-found':
-        //                     // File doesn't exist
-        //                     break;
-        //                 case 'storage/unauthorized':
-        //                     // User doesn't have permission to access the object
-        //                     break;
-        //                 case 'storage/canceled':
-        //                     // User canceled the upload
-        //                     break;
-
-        //                 // ...
-
-        //                 case 'storage/unknown':
-        //                     // Unknown error occurred, inspect the server response
-        //                     break;
-        //                 }
-        //             });
-        //         }
-        //     });
-        // }
         function downloadPfp() {
             const userId = auth.currentUser.uid;
             const userRef = ref(database, 'users/' + userId);
